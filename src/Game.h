@@ -1,11 +1,23 @@
 #pragma once
 #include <SFML/Graphics.hpp>
+#include <vector>
+#include <algorithm>
+#include <random>
 
 class Game {
 private:
     sf::RenderWindow window;
     sf::Texture texture;
-    std::optional<sf::Sprite> sprite;
+    std::vector<sf::Sprite> tiles;
+
+    float puzzleDisplaySize = 600.0f; // size of the whole puzzle on screen
+    float scaleFactor;
+
+    const int GRID_SIZE = 3;
+    int tileSize;
+
+    void createTiles();
+    void shuffleTiles();
 
     void processEvents();
     void update();

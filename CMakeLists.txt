@@ -12,7 +12,15 @@ FetchContent_Declare(SFML
     SYSTEM)
 FetchContent_MakeAvailable(SFML)
 
-add_executable(main src/main.cpp)
+# Add sources (include Game.cpp so the Game class is compiled; include Game.h for IDE visibility)
+add_executable(main 
+    src/main.cpp
+    src/Game.cpp
+    src/Game.h
+)
+# Ensure the root of the source tree is visible for headers like "Game.h"
+target_include_directories(main PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
+
 target_compile_features(main PRIVATE cxx_std_17)
 target_link_libraries(main PRIVATE SFML::Graphics)
 

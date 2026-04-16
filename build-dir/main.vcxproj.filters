@@ -4,11 +4,22 @@
     <ClCompile Include="C:\Users\gough\Documents\GitHub\finalProject\src\main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="C:\Users\gough\Documents\GitHub\finalProject\src\Game.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="C:\Users\gough\Documents\GitHub\finalProject\src\Game.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="C:\Users\gough\Documents\GitHub\finalProject\CMakeLists.txt" />
   </ItemGroup>
   <ItemGroup>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{4CFBCD20-A637-36DB-9B12-D875E8C85E48}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Source Files">
       <UniqueIdentifier>{D4FD8F49-70B6-303F-8C58-017602A8715D}</UniqueIdentifier>
     </Filter>

@@ -1,0 +1,44 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="17.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <CustomBuild Include="C:\Users\gough\Documents\GitHub\finalProject\build-dir\_deps\ogg-subbuild\CMakeFiles\b900c9345f2bbc18d6cae087e1e32f22\ogg-populate-mkdir.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="C:\Users\gough\Documents\GitHub\finalProject\build-dir\_deps\ogg-subbuild\CMakeFiles\b900c9345f2bbc18d6cae087e1e32f22\ogg-populate-download.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="C:\Users\gough\Documents\GitHub\finalProject\build-dir\_deps\ogg-subbuild\CMakeFiles\b900c9345f2bbc18d6cae087e1e32f22\ogg-populate-update.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="C:\Users\gough\Documents\GitHub\finalProject\build-dir\_deps\ogg-subbuild\CMakeFiles\b900c9345f2bbc18d6cae087e1e32f22\ogg-populate-patch.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="C:\Users\gough\Documents\GitHub\finalProject\build-dir\_deps\ogg-subbuild\CMakeFiles\b900c9345f2bbc18d6cae087e1e32f22\ogg-populate-configure.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="C:\Users\gough\Documents\GitHub\finalProject\build-dir\_deps\ogg-subbuild\CMakeFiles\b900c9345f2bbc18d6cae087e1e32f22\ogg-populate-build.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="C:\Users\gough\Documents\GitHub\finalProject\build-dir\_deps\ogg-subbuild\CMakeFiles\b900c9345f2bbc18d6cae087e1e32f22\ogg-populate-install.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="C:\Users\gough\Documents\GitHub\finalProject\build-dir\_deps\ogg-subbuild\CMakeFiles\b900c9345f2bbc18d6cae087e1e32f22\ogg-populate-test.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="C:\Users\gough\Documents\GitHub\finalProject\build-dir\_deps\ogg-subbuild\CMakeFiles\d788f17fc590e4e65311e2a94b7104ad\ogg-populate-complete.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="C:\Users\gough\Documents\GitHub\finalProject\build-dir\_deps\ogg-subbuild\CMakeFiles\fcc06e0bb63843ec2f24ea1e0de58da9\ogg-populate.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="C:\Users\gough\Documents\GitHub\finalProject\build-dir\_deps\ogg-subbuild\CMakeLists.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="C:\Users\gough\Documents\GitHub\finalProject\build-dir\_deps\ogg-subbuild\CMakeFiles\ogg-populate" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="CMake Rules">
+      <UniqueIdentifier>{6451873C-0B15-3DD8-A02B-C0248978C7B5}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

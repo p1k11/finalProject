@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="17.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <CustomBuild Include="C:\Users\gough\Documents\GitHub\finalProject\build-dir\_deps\flac-subbuild\CMakeFiles\cd77fe15024bf50aa37293618a9a6879\generate.stamp.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="CMake Rules">
+      <UniqueIdentifier>{1A827D93-F348-39E8-8147-EB20A40E8251}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

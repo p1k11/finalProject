@@ -1,0 +1,10 @@
+^C:\USERS\GOUGH\DOCUMENTS\GITHUB\FINALPROJECT\BUILD-DIR\CMAKEFILES\0843E6B83C773C71D45A086C7D54F734\GENERATE.STAMP.RULE
+setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -SC:/Users/gough/Documents/GitHub/finalProject -BC:/Users/gough/Documents/GitHub/finalProject/build-dir --check-stamp-list CMakeFiles/generate.stamp.list --vs-solution-file C:/Users/gough/Documents/GitHub/finalProject/build-dir/CMakeSFMLProject.sln
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd

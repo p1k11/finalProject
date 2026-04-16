@@ -1,0 +1,44 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="17.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <CustomBuild Include="C:\Users\gough\Documents\GitHub\finalProject\build-dir\_deps\vorbis-subbuild\CMakeFiles\6f2c7508dd9aed23d2a1f0cf6b2fe200\vorbis-populate-mkdir.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="C:\Users\gough\Documents\GitHub\finalProject\build-dir\_deps\vorbis-subbuild\CMakeFiles\6f2c7508dd9aed23d2a1f0cf6b2fe200\vorbis-populate-download.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="C:\Users\gough\Documents\GitHub\finalProject\build-dir\_deps\vorbis-subbuild\CMakeFiles\6f2c7508dd9aed23d2a1f0cf6b2fe200\vorbis-populate-update.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="C:\Users\gough\Documents\GitHub\finalProject\build-dir\_deps\vorbis-subbuild\CMakeFiles\6f2c7508dd9aed23d2a1f0cf6b2fe200\vorbis-populate-patch.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="C:\Users\gough\Documents\GitHub\finalProject\build-dir\_deps\vorbis-subbuild\CMakeFiles\6f2c7508dd9aed23d2a1f0cf6b2fe200\vorbis-populate-configure.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="C:\Users\gough\Documents\GitHub\finalProject\build-dir\_deps\vorbis-subbuild\CMakeFiles\6f2c7508dd9aed23d2a1f0cf6b2fe200\vorbis-populate-build.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="C:\Users\gough\Documents\GitHub\finalProject\build-dir\_deps\vorbis-subbuild\CMakeFiles\6f2c7508dd9aed23d2a1f0cf6b2fe200\vorbis-populate-install.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="C:\Users\gough\Documents\GitHub\finalProject\build-dir\_deps\vorbis-subbuild\CMakeFiles\6f2c7508dd9aed23d2a1f0cf6b2fe200\vorbis-populate-test.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="C:\Users\gough\Documents\GitHub\finalProject\build-dir\_deps\vorbis-subbuild\CMakeFiles\e71b5c9f7066c5d829989bf6e500f544\vorbis-populate-complete.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="C:\Users\gough\Documents\GitHub\finalProject\build-dir\_deps\vorbis-subbuild\CMakeFiles\e9976dc0c309c1709c49d01a21a43513\vorbis-populate.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="C:\Users\gough\Documents\GitHub\finalProject\build-dir\_deps\vorbis-subbuild\CMakeLists.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="C:\Users\gough\Documents\GitHub\finalProject\build-dir\_deps\vorbis-subbuild\CMakeFiles\vorbis-populate" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="CMake Rules">
+      <UniqueIdentifier>{A516F544-A652-348D-B3B9-56D4FEE472F4}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

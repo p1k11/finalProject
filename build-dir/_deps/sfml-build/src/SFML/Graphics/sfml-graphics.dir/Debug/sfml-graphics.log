@@ -1,0 +1,32 @@
+﻿  Building Custom Rule C:/Users/gough/Documents/GitHub/finalProject/build-dir/_deps/sfml-src/src/SFML/Graphics/CMakeLists.txt
+  BlendMode.cpp
+  Font.cpp
+  Glsl.cpp
+  GLCheck.cpp
+  GLExtensions.cpp
+  Image.cpp
+  RenderStates.cpp
+  RenderTexture.cpp
+  RenderTarget.cpp
+  RenderWindow.cpp
+  Shader.cpp
+  StencilMode.cpp
+  Texture.cpp
+  TextureSaver.cpp
+  Transform.cpp
+  Transformable.cpp
+  View.cpp
+  Shape.cpp
+  CircleShape.cpp
+  RectangleShape.cpp
+  Generating Code...
+  Compiling...
+  ConvexShape.cpp
+  Sprite.cpp
+  Text.cpp
+  VertexArray.cpp
+  VertexBuffer.cpp
+  RenderTextureImplFBO.cpp
+  RenderTextureImplDefault.cpp
+  Generating Code...
+  sfml-graphics.vcxproj -> C:\Users\gough\Documents\GitHub\finalProject\build-dir\_deps\sfml-build\lib\Debug\sfml-graphics-s-d.lib

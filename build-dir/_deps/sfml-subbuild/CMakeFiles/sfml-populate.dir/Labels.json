@@ -1,0 +1,46 @@
+{
+	"sources" : 
+	[
+		{
+			"file" : "C:/Users/gough/Documents/GitHub/finalProject/build-dir/_deps/sfml-subbuild/CMakeFiles/sfml-populate"
+		},
+		{
+			"file" : "C:/Users/gough/Documents/GitHub/finalProject/build-dir/_deps/sfml-subbuild/CMakeFiles/e39da25dbbe2ccf58c2d96b8f5acc9d0/sfml-populate.rule"
+		},
+		{
+			"file" : "C:/Users/gough/Documents/GitHub/finalProject/build-dir/_deps/sfml-subbuild/CMakeFiles/ebef3d6e5bc12938e2f1554a0366e47a/sfml-populate-complete.rule"
+		},
+		{
+			"file" : "C:/Users/gough/Documents/GitHub/finalProject/build-dir/_deps/sfml-subbuild/CMakeFiles/d5e930179da7552d85903a1e081c1837/sfml-populate-build.rule"
+		},
+		{
+			"file" : "C:/Users/gough/Documents/GitHub/finalProject/build-dir/_deps/sfml-subbuild/CMakeFiles/d5e930179da7552d85903a1e081c1837/sfml-populate-configure.rule"
+		},
+		{
+			"file" : "C:/Users/gough/Documents/GitHub/finalProject/build-dir/_deps/sfml-subbuild/CMakeFiles/d5e930179da7552d85903a1e081c1837/sfml-populate-download.rule"
+		},
+		{
+			"file" : "C:/Users/gough/Documents/GitHub/finalProject/build-dir/_deps/sfml-subbuild/CMakeFiles/d5e930179da7552d85903a1e081c1837/sfml-populate-install.rule"
+		},
+		{
+			"file" : "C:/Users/gough/Documents/GitHub/finalProject/build-dir/_deps/sfml-subbuild/CMakeFiles/d5e930179da7552d85903a1e081c1837/sfml-populate-mkdir.rule"
+		},
+		{
+			"file" : "C:/Users/gough/Documents/GitHub/finalProject/build-dir/_deps/sfml-subbuild/CMakeFiles/d5e930179da7552d85903a1e081c1837/sfml-populate-patch.rule"
+		},
+		{
+			"file" : "C:/Users/gough/Documents/GitHub/finalProject/build-dir/_deps/sfml-subbuild/CMakeFiles/d5e930179da7552d85903a1e081c1837/sfml-populate-test.rule"
+		},
+		{
+			"file" : "C:/Users/gough/Documents/GitHub/finalProject/build-dir/_deps/sfml-subbuild/CMakeFiles/d5e930179da7552d85903a1e081c1837/sfml-populate-update.rule"
+		}
+	],
+	"target" : 
+	{
+		"labels" : 
+		[
+			"sfml-populate"
+		],
+		"name" : "sfml-populate"
+	}
+}

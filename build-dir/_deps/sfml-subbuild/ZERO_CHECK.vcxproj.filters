@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="17.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <CustomBuild Include="C:\Users\gough\Documents\GitHub\finalProject\build-dir\_deps\sfml-subbuild\CMakeFiles\e39da25dbbe2ccf58c2d96b8f5acc9d0\generate.stamp.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="CMake Rules">
+      <UniqueIdentifier>{BDE868B3-415C-386E-B872-7E3F8787E96B}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

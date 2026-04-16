@@ -1,0 +1,46 @@
+{
+	"sources" : 
+	[
+		{
+			"file" : "C:/Users/gough/Documents/GitHub/finalProject/build-dir/_deps/flac-subbuild/CMakeFiles/flac-populate"
+		},
+		{
+			"file" : "C:/Users/gough/Documents/GitHub/finalProject/build-dir/_deps/flac-subbuild/CMakeFiles/cd77fe15024bf50aa37293618a9a6879/flac-populate.rule"
+		},
+		{
+			"file" : "C:/Users/gough/Documents/GitHub/finalProject/build-dir/_deps/flac-subbuild/CMakeFiles/95537794e0638a5152a27c4fbb0a9bf1/flac-populate-complete.rule"
+		},
+		{
+			"file" : "C:/Users/gough/Documents/GitHub/finalProject/build-dir/_deps/flac-subbuild/CMakeFiles/401b1ee5aa18dc872625bebbfde25bbc/flac-populate-build.rule"
+		},
+		{
+			"file" : "C:/Users/gough/Documents/GitHub/finalProject/build-dir/_deps/flac-subbuild/CMakeFiles/401b1ee5aa18dc872625bebbfde25bbc/flac-populate-configure.rule"
+		},
+		{
+			"file" : "C:/Users/gough/Documents/GitHub/finalProject/build-dir/_deps/flac-subbuild/CMakeFiles/401b1ee5aa18dc872625bebbfde25bbc/flac-populate-download.rule"
+		},
+		{
+			"file" : "C:/Users/gough/Documents/GitHub/finalProject/build-dir/_deps/flac-subbuild/CMakeFiles/401b1ee5aa18dc872625bebbfde25bbc/flac-populate-install.rule"
+		},
+		{
+			"file" : "C:/Users/gough/Documents/GitHub/finalProject/build-dir/_deps/flac-subbuild/CMakeFiles/401b1ee5aa18dc872625bebbfde25bbc/flac-populate-mkdir.rule"
+		},
+		{
+			"file" : "C:/Users/gough/Documents/GitHub/finalProject/build-dir/_deps/flac-subbuild/CMakeFiles/401b1ee5aa18dc872625bebbfde25bbc/flac-populate-patch.rule"
+		},
+		{
+			"file" : "C:/Users/gough/Documents/GitHub/finalProject/build-dir/_deps/flac-subbuild/CMakeFiles/401b1ee5aa18dc872625bebbfde25bbc/flac-populate-test.rule"
+		},
+		{
+			"file" : "C:/Users/gough/Documents/GitHub/finalProject/build-dir/_deps/flac-subbuild/CMakeFiles/401b1ee5aa18dc872625bebbfde25bbc/flac-populate-update.rule"
+		}
+	],
+	"target" : 
+	{
+		"labels" : 
+		[
+			"flac-populate"
+		],
+		"name" : "flac-populate"
+	}
+}

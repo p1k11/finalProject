@@ -1,0 +1,3 @@
+C:/Users/gough/Documents/GitHub/finalProject/build-dir/_deps/vorbis-subbuild/CMakeFiles/vorbis-populate.dir
+C:/Users/gough/Documents/GitHub/finalProject/build-dir/_deps/vorbis-subbuild/CMakeFiles/ALL_BUILD.dir
+C:/Users/gough/Documents/GitHub/finalProject/build-dir/_deps/vorbis-subbuild/CMakeFiles/ZERO_CHECK.dir

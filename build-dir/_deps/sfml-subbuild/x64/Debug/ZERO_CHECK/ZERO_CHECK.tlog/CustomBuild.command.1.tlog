@@ -1,0 +1,10 @@
+^C:\USERS\GOUGH\DOCUMENTS\GITHUB\FINALPROJECT\BUILD-DIR\_DEPS\SFML-SUBBUILD\CMAKEFILES\E39DA25DBBE2CCF58C2D96B8F5ACC9D0\GENERATE.STAMP.RULE
+setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -SC:/Users/gough/Documents/GitHub/finalProject/build-dir/_deps/sfml-subbuild -BC:/Users/gough/Documents/GitHub/finalProject/build-dir/_deps/sfml-subbuild --check-stamp-list CMakeFiles/generate.stamp.list --vs-solution-file C:/Users/gough/Documents/GitHub/finalProject/build-dir/_deps/sfml-subbuild/sfml-populate.sln
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd

@@ -1,0 +1,10 @@
+^C:\USERS\GOUGH\DOCUMENTS\GITHUB\FINALPROJECT\BUILD-DIR\_DEPS\FLAC-SUBBUILD\CMAKEFILES\CD77FE15024BF50AA37293618A9A6879\GENERATE.STAMP.RULE
+setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -SC:/Users/gough/Documents/GitHub/finalProject/build-dir/_deps/flac-subbuild -BC:/Users/gough/Documents/GitHub/finalProject/build-dir/_deps/flac-subbuild --check-stamp-list CMakeFiles/generate.stamp.list --vs-solution-file C:/Users/gough/Documents/GitHub/finalProject/build-dir/_deps/flac-subbuild/flac-populate.sln
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd

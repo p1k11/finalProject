@@ -1,0 +1,46 @@
+{
+	"sources" : 
+	[
+		{
+			"file" : "C:/Users/gough/Documents/GitHub/finalProject/build-dir/_deps/vorbis-subbuild/CMakeFiles/vorbis-populate"
+		},
+		{
+			"file" : "C:/Users/gough/Documents/GitHub/finalProject/build-dir/_deps/vorbis-subbuild/CMakeFiles/e9976dc0c309c1709c49d01a21a43513/vorbis-populate.rule"
+		},
+		{
+			"file" : "C:/Users/gough/Documents/GitHub/finalProject/build-dir/_deps/vorbis-subbuild/CMakeFiles/e71b5c9f7066c5d829989bf6e500f544/vorbis-populate-complete.rule"
+		},
+		{
+			"file" : "C:/Users/gough/Documents/GitHub/finalProject/build-dir/_deps/vorbis-subbuild/CMakeFiles/6f2c7508dd9aed23d2a1f0cf6b2fe200/vorbis-populate-build.rule"
+		},
+		{
+			"file" : "C:/Users/gough/Documents/GitHub/finalProject/build-dir/_deps/vorbis-subbuild/CMakeFiles/6f2c7508dd9aed23d2a1f0cf6b2fe200/vorbis-populate-configure.rule"
+		},
+		{
+			"file" : "C:/Users/gough/Documents/GitHub/finalProject/build-dir/_deps/vorbis-subbuild/CMakeFiles/6f2c7508dd9aed23d2a1f0cf6b2fe200/vorbis-populate-download.rule"
+		},
+		{
+			"file" : "C:/Users/gough/Documents/GitHub/finalProject/build-dir/_deps/vorbis-subbuild/CMakeFiles/6f2c7508dd9aed23d2a1f0cf6b2fe200/vorbis-populate-install.rule"
+		},
+		{
+			"file" : "C:/Users/gough/Documents/GitHub/finalProject/build-dir/_deps/vorbis-subbuild/CMakeFiles/6f2c7508dd9aed23d2a1f0cf6b2fe200/vorbis-populate-mkdir.rule"
+		},
+		{
+			"file" : "C:/Users/gough/Documents/GitHub/finalProject/build-dir/_deps/vorbis-subbuild/CMakeFiles/6f2c7508dd9aed23d2a1f0cf6b2fe200/vorbis-populate-patch.rule"
+		},
+		{
+			"file" : "C:/Users/gough/Documents/GitHub/finalProject/build-dir/_deps/vorbis-subbuild/CMakeFiles/6f2c7508dd9aed23d2a1f0cf6b2fe200/vorbis-populate-test.rule"
+		},
+		{
+			"file" : "C:/Users/gough/Documents/GitHub/finalProject/build-dir/_deps/vorbis-subbuild/CMakeFiles/6f2c7508dd9aed23d2a1f0cf6b2fe200/vorbis-populate-update.rule"
+		}
+	],
+	"target" : 
+	{
+		"labels" : 
+		[
+			"vorbis-populate"
+		],
+		"name" : "vorbis-populate"
+	}
+}

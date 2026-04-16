@@ -15,6 +15,8 @@ private:
 
     const int GRID_SIZE = 3;
     int tileSize;
+    int emptyX = 0;
+    int emptyY = 0;
 
     void createTiles();
     void shuffleTiles();

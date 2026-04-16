@@ -36,7 +36,9 @@ void Game::createTiles() {
 
     for (int y = 0; y < GRID_SIZE; y++) {
         for (int x = 0; x < GRID_SIZE; x++) {
-
+            if (x == 0 && y == 0) {
+				continue; // bottom right tile is empty
+            }
             sf::Sprite tile(texture);
 
             // Select part of the image

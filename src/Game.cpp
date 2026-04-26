@@ -4,7 +4,7 @@
 #include <random>
 
 Game::Game()
-    : window(sf::VideoMode({ 800, 600 }), "Puzzle Game")
+    : window(sf::VideoMode({ 800, 600 }), "Slide Puzzle")
 {
     if (!texture.loadFromFile("image.jpg")) {
         std::cout << "Failed to load image\n";
@@ -23,26 +23,29 @@ void Game::run() {
 }
 
 void Game::createTiles() {
-    tiles.clear(); 
+    tiles.clear();
 
-    // Size of one tile in the original image
     tileSize = texture.getSize().x / GRID_SIZE;
-
-    // How big the whole puzzle is on screen
     scaleFactor = puzzleDisplaySize / texture.getSize().x;
 
     float offsetX = (800 - puzzleDisplaySize) / 2.0f;
     float offsetY = (600 - puzzleDisplaySize) / 2.0f;
 
+    emptyX = GRID_SIZE - 1;
+    emptyY = GRID_SIZE - 1;
+
     for (int y = 0; y < GRID_SIZE; y++) {
         for (int x = 0; x < GRID_SIZE; x++) {
-            if (x == 0 && y == 0) {
-				continue; // bottom right tile is empty
-            }
-            sf::Sprite tile(texture);
 
-            // Select part of the image
-            tile.setTextureRect(sf::IntRect({
+            // Skip bottom-right tile (empty space)
+            if (x == emptyX && y == emptyY)
+                continue;
+
+            Tile tile(texture, x, y);
+
+            tile.sprite = sf::Sprite(texture);
+
+            tile.sprite.setTextureRect(sf::IntRect({
                 x * tileSize,
                 y * tileSize
                 }, {
@@ -50,11 +53,12 @@ void Game::createTiles() {
                     tileSize
                 }));
 
-                // Scale tile
-                tile.setScale({ scaleFactor, scaleFactor });
+                tile.sprite.setScale({ scaleFactor, scaleFactor });
 
-                // Position tile (scaled + centered)
-                tile.setPosition({
+                tile.gridX = x;
+                tile.gridY = y;
+
+                tile.sprite.setPosition({
                     offsetX + x * tileSize * scaleFactor,
                     offsetY + y * tileSize * scaleFactor
                     });
@@ -73,14 +77,62 @@ void Game::shuffleTiles() {
         int x = i % GRID_SIZE;
         int y = i / GRID_SIZE;
 
-        tiles[i].setPosition({
+        tiles[i].gridX = x;
+        tiles[i].gridY = y;
+
+        tiles[i].sprite.setPosition({
             offsetX + x * tileSize * scaleFactor,
             offsetY + y * tileSize * scaleFactor
             });
     }
+
+    // reset empty tile to last position
+    emptyX = GRID_SIZE - 1;
+    emptyY = GRID_SIZE - 1;
 }
+
+void Game::handleClick() {
+    auto mousePos = sf::Mouse::getPosition(window);
+
+    for (auto& tile : tiles) {
+        if (tile.sprite.getGlobalBounds().contains((sf::Vector2f)mousePos)) {
+
+            int dx = abs(tile.gridX - emptyX);
+            int dy = abs(tile.gridY - emptyY);
+
+            // Check if adjacent
+            if (dx + dy == 1) {
+
+                // Move tile into empty space
+                int oldX = tile.gridX;
+                int oldY = tile.gridY;
+
+                tile.gridX = emptyX;
+                tile.gridY = emptyY;
+
+                emptyX = oldX;
+                emptyY = oldY;
+
+                // Update visual position
+                float offsetX = (800 - puzzleDisplaySize) / 2.0f;
+                float offsetY = (600 - puzzleDisplaySize) / 2.0f;
+
+                tile.sprite.setPosition({
+                    offsetX + tile.gridX * tileSize * scaleFactor,
+                    offsetY + tile.gridY * tileSize * scaleFactor
+                    });
+            }
+
+            break;
+        }
+    }
+}
+
 void Game::processEvents() {
     while (auto event = window.pollEvent()) {
+        if (event->is<sf::Event::MouseButtonPressed>()) {
+            handleClick();
+        }
         if (event->is<sf::Event::Closed>()) {
             window.close();
         }
@@ -93,8 +145,10 @@ void Game::update() {
 
 void Game::render() {
     window.clear();
+
     for (auto& tile : tiles) {
-        window.draw(tile);
+        window.draw(tile.sprite);
     }
+
     window.display();
 }

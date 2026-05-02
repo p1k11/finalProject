@@ -10,6 +10,26 @@ Game::Game()
         std::cout << "Failed to load image\n";
     }
 
+    if (!font.openFromFile("Helvetica.ttf")) {
+        std::cout << "Failed to load font\n";
+        fontLoaded = false;
+    }
+    else {
+        fontLoaded = true;
+
+        scoreText.emplace(font);
+        scoreText->setCharacterSize(24);
+        scoreText->setFillColor(sf::Color::White);
+        scoreText->setPosition({ 10.f, 10.f });
+
+        messageText.emplace(font);
+        messageText->setCharacterSize(36);
+        messageText->setFillColor(sf::Color::Yellow);
+        messageText->setString("");
+
+        updateScoreText();
+    }
+
     createTiles();
     shuffleTiles();
 }
@@ -73,7 +93,7 @@ void Game::shuffleTiles() {
     float offsetX = (800 - puzzleDisplaySize) / 2.0f;
     float offsetY = (600 - puzzleDisplaySize) / 2.0f;
 
-    for (int i = 0; i < tiles.size(); i++) {
+    for (int i = 0; i < static_cast<int>(tiles.size()); i++) {
         int x = i % GRID_SIZE;
         int y = i / GRID_SIZE;
 
@@ -122,13 +142,30 @@ void Game::handleClick() {
                     offsetY + tile.gridY * tileSize * scaleFactor
                     });
             }
+
             if (checkWin()) {
+                // increment score and show message. delay reshuffle so user can see solved board
                 score++;
+                updateScoreText();
 
                 std::cout << "Puzzle solved!\n";
                 std::cout << "Score: " << score << "\n";
 
-                shuffleTiles();
+                pendingReshuffle = true;
+                reshuffleClock.restart();
+
+                if (fontLoaded && messageText) {
+                    messageText->setString("Puzzle solved!");
+
+                    sf::FloatRect bounds = messageText->getLocalBounds();
+
+                    messageText->setOrigin({
+                        bounds.position.x + bounds.size.x / 2.f,
+                        bounds.position.y + bounds.size.y / 2.f
+                        });
+
+                    messageText->setPosition({ 800.f / 2.f, 600.f / 2.f });
+                }
             }
 
             break;
@@ -164,10 +201,35 @@ void Game::processEvents() {
         }
         if (event->is<sf::Event::KeyPressed>()) {
 
-            auto keyEvent = event->getIf<sf::Event::KeyPressed>();
+            if (auto keyEvent = event->getIf<sf::Event::KeyPressed>()) {
 
-            if (keyEvent && keyEvent->code == sf::Keyboard::Key::W) {
-                solvePuzzle();
+                if (keyEvent->code == sf::Keyboard::Key::W) {
+                    solvePuzzle();
+
+                    if (checkWin()) {
+                        score++;
+                        updateScoreText();
+
+                        std::cout << "Puzzle solved!\n";
+                        std::cout << "Score: " << score << "\n";
+
+                        pendingReshuffle = true;
+                        reshuffleClock.restart();
+
+                        if (fontLoaded && messageText) {
+                            messageText->setString("Puzzle solved!");
+
+                            sf::FloatRect bounds = messageText->getLocalBounds();
+
+                            messageText->setOrigin({
+                                bounds.position.x + bounds.size.x / 2.f,
+                                bounds.position.y + bounds.size.y / 2.f
+                                });
+
+                            messageText->setPosition({ 800.f / 2.f, 600.f / 2.f });
+                        }
+                    }
+                }
             }
         }
     }
@@ -187,7 +249,16 @@ bool Game::checkWin() {
     return true;
 }
 void Game::update() {
-    // nothing yet
+    // handle delayed reshuffle after win
+    if (pendingReshuffle) {
+        if (reshuffleClock.getElapsedTime().asSeconds() >= reshuffleDelay) {
+            shuffleTiles();
+            pendingReshuffle = false;
+            if (fontLoaded) {
+                messageText->setString("");
+            }
+        }
+    }
 }
 
 void Game::render() {
@@ -197,5 +268,21 @@ void Game::render() {
         window.draw(tile.sprite);
     }
 
+    // draw score
+    if (fontLoaded) {
+        window.draw(*scoreText);
+    }
+
+    // draw win message while waiting to reshuffle
+    if (pendingReshuffle && fontLoaded) {
+        window.draw(*messageText);
+    }
+
     window.display();
+}
+
+void Game::updateScoreText() {
+    if (scoreText) {
+        scoreText->setString("Score: " + std::to_string(score));
+    }
 }

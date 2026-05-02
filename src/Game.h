@@ -3,6 +3,7 @@
 #include <vector>
 #include <algorithm>
 #include <random>
+#include <optional>
 
 class Game {
 private:
@@ -17,6 +18,15 @@ private:
     int emptyX = 0;
     int emptyY = 0;
     int score = 0;
+
+    sf::Font font;
+    bool fontLoaded = false;
+    std::optional<sf::Text> scoreText;
+    std::optional<sf::Text> messageText;
+    // delay before reshuffling so user can see solved board
+    bool pendingReshuffle = false;
+    sf::Clock reshuffleClock;
+    float reshuffleDelay = 1.0f; // seconds
 
     struct Tile {
         sf::Sprite sprite;
@@ -36,7 +46,7 @@ private:
         }
     };
 
-	//winning condition: all tiles in correct position
+    //winning condition: all tiles in correct position
     bool checkWin();
 
     std::vector<Tile> tiles;
@@ -49,6 +59,8 @@ private:
     void solvePuzzle();
     void update();
     void render();
+
+    void updateScoreText();
 
 public:
     Game();

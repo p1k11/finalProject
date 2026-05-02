@@ -16,16 +16,28 @@ private:
     int tileSize;
     int emptyX = 0;
     int emptyY = 0;
+    int score = 0;
 
     struct Tile {
         sf::Sprite sprite;
+
         int gridX;
         int gridY;
 
+        int correctX;
+        int correctY;
+
         Tile(const sf::Texture& texture, int x, int y)
-            : sprite(texture), gridX(x), gridY(y) {
+            : sprite(texture),
+            gridX(x),
+            gridY(y),
+            correctX(x),
+            correctY(y) {
         }
     };
+
+	//winning condition: all tiles in correct position
+    bool checkWin();
 
     std::vector<Tile> tiles;
 
@@ -34,6 +46,7 @@ private:
     void handleClick();
 
     void processEvents();
+    void solvePuzzle();
     void update();
     void render();
 

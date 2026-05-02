@@ -37,7 +37,7 @@ void Game::createTiles() {
     for (int y = 0; y < GRID_SIZE; y++) {
         for (int x = 0; x < GRID_SIZE; x++) {
 
-            // Skip bottom-right tile (empty space)
+            // Skip bottom right tile (empty space)
             if (x == emptyX && y == emptyY)
                 continue;
 
@@ -122,12 +122,38 @@ void Game::handleClick() {
                     offsetY + tile.gridY * tileSize * scaleFactor
                     });
             }
+            if (checkWin()) {
+                score++;
+
+                std::cout << "Puzzle solved!\n";
+                std::cout << "Score: " << score << "\n";
+
+                shuffleTiles();
+            }
 
             break;
         }
     }
 }
+void Game::solvePuzzle() {
 
+    float offsetX = (800 - puzzleDisplaySize) / 2.0f;
+    float offsetY = (600 - puzzleDisplaySize) / 2.0f;
+
+    for (auto& tile : tiles) {
+
+        tile.gridX = tile.correctX;
+        tile.gridY = tile.correctY;
+
+        tile.sprite.setPosition({
+            offsetX + tile.gridX * tileSize * scaleFactor,
+            offsetY + tile.gridY * tileSize * scaleFactor
+            });
+    }
+
+    emptyX = GRID_SIZE - 1;
+    emptyY = GRID_SIZE - 1;
+}
 void Game::processEvents() {
     while (auto event = window.pollEvent()) {
         if (event->is<sf::Event::MouseButtonPressed>()) {
@@ -136,9 +162,30 @@ void Game::processEvents() {
         if (event->is<sf::Event::Closed>()) {
             window.close();
         }
+        if (event->is<sf::Event::KeyPressed>()) {
+
+            auto keyEvent = event->getIf<sf::Event::KeyPressed>();
+
+            if (keyEvent && keyEvent->code == sf::Keyboard::Key::W) {
+                solvePuzzle();
+            }
+        }
     }
 }
 
+//winning condition: all tiles in correct position
+bool Game::checkWin() {
+    for (auto& tile : tiles) {
+
+        if (tile.gridX != tile.correctX ||
+            tile.gridY != tile.correctY) {
+
+            return false;
+        }
+    }
+
+    return true;
+}
 void Game::update() {
     // nothing yet
 }

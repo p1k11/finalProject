@@ -94,6 +94,27 @@ private:
     void updateLeaderboardText();
     void onPuzzleSolved();
 
+    enum class GameState {
+        MainMenu,
+        Playing,
+        Leaderboard
+    };
+    //main menu stuff
+    GameState state = GameState::MainMenu;
+
+    sf::RectangleShape playButton;
+    sf::RectangleShape leaderboardButton;
+    sf::RectangleShape backButton;
+
+    std::optional<sf::Text> titleText;
+    std::optional<sf::Text> playButtonText;
+    std::optional<sf::Text> leaderboardButtonText;
+    std::optional<sf::Text> backButtonText;
+
+    void setupMenu();
+    void handleMenuClick(sf::Vector2f mousePos);
+    void renderMainMenu();
+    void renderLeaderboardScreen();
 public:
 	// constructor and main loop
     Game();

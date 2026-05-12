@@ -50,6 +50,7 @@ Game::Game()
 		// update leaderboard text
         updateLeaderboardText();
     }
+    setupMenu();
 	// initialize game state
     createTiles();
 	// shuffle tiles to start the game
@@ -64,7 +65,45 @@ void Game::run() {
         render();
     }
 }
+void Game::setupMenu() {
+    if (!fontLoaded) return;
 
+    titleText.emplace(font);
+    titleText->setString("Slide Puzzle");
+    titleText->setCharacterSize(48);
+    titleText->setFillColor(sf::Color::White);
+    titleText->setPosition({ 260.f, 100.f });
+
+    playButton.setSize({ 250.f, 60.f });
+    playButton.setPosition({ 275.f, 230.f });
+    playButton.setFillColor(sf::Color(80, 80, 80));
+
+    leaderboardButton.setSize({ 250.f, 60.f });
+    leaderboardButton.setPosition({ 275.f, 320.f });
+    leaderboardButton.setFillColor(sf::Color(80, 80, 80));
+
+    backButton.setSize({ 180.f, 50.f });
+    backButton.setPosition({ 20.f, 520.f });
+    backButton.setFillColor(sf::Color(80, 80, 80));
+
+    playButtonText.emplace(font);
+    playButtonText->setString("Play Game");
+    playButtonText->setCharacterSize(28);
+    playButtonText->setFillColor(sf::Color::White);
+    playButtonText->setPosition({ 330.f, 242.f });
+
+    leaderboardButtonText.emplace(font);
+    leaderboardButtonText->setString("Leaderboard");
+    leaderboardButtonText->setCharacterSize(28);
+    leaderboardButtonText->setFillColor(sf::Color::White);
+    leaderboardButtonText->setPosition({ 315.f, 332.f });
+
+    backButtonText.emplace(font);
+    backButtonText->setString("Back");
+    backButtonText->setCharacterSize(24);
+    backButtonText->setFillColor(sf::Color::White);
+    backButtonText->setPosition({ 80.f, 530.f });
+}
 // Create tile sprites and set their initial positions based on the original image
 void Game::createTiles() {
     tiles.clear();
@@ -224,12 +263,37 @@ void Game::solvePuzzle() {
     emptyX = GRID_SIZE - 1;
     emptyY = GRID_SIZE - 1;
 }
+void Game::handleMenuClick(sf::Vector2f mousePos) {
+    if (playButton.getGlobalBounds().contains(mousePos)) {
+        score = 0;
+        updateScoreText();
+        gameClock.restart();
+        shuffleTiles();
+        state = GameState::Playing;
+    }
 
-// Process all window events: handle mouse clicks, key presses, and window close events
+    if (leaderboardButton.getGlobalBounds().contains(mousePos)) {
+        updateLeaderboardText();
+        state = GameState::Leaderboard;
+    }
+}
+// Process all window events handle mouse clicks, key presses, and window close events
 void Game::processEvents() {
     while (auto event = window.pollEvent()) {
         if (event->is<sf::Event::MouseButtonPressed>()) {
-            handleClick();
+            auto mousePos = sf::Vector2f(sf::Mouse::getPosition(window));
+
+            if (state == GameState::MainMenu) {
+                handleMenuClick(mousePos);
+            }
+            else if (state == GameState::Playing) {
+                handleClick();
+            }
+            else if (state == GameState::Leaderboard) {
+                if (backButton.getGlobalBounds().contains(mousePos)) {
+                    state = GameState::MainMenu;
+                }
+            }
         }
         if (event->is<sf::Event::Closed>()) {
             window.close();
@@ -351,28 +415,49 @@ void Game::updateLeaderboardText() {
 
     leaderboardText->setString(text);
 }
-// Render the game: clear the window, draw all tiles, score, timer, leaderboard, and win message if applicable, then display the updated window
+
+void Game::renderMainMenu() {
+    if (!fontLoaded) return;
+
+    if (titleText) window.draw(*titleText);
+
+    window.draw(playButton);
+    window.draw(leaderboardButton);
+
+    if (playButtonText) window.draw(*playButtonText);
+    if (leaderboardButtonText) window.draw(*leaderboardButtonText);
+}
+
+void Game::renderLeaderboardScreen() {
+    if (!fontLoaded) return;
+
+    if (leaderboardText) window.draw(*leaderboardText);
+
+    window.draw(backButton);
+
+    if (backButtonText) window.draw(*backButtonText);
+}
+// Render the game clear the window, draw all tiles, score, timer, leaderboard, and win message if applicable, then display the updated window
 void Game::render() {
     window.clear();
 
-    for (auto& tile : tiles) {
-        window.draw(tile.sprite);
+    if (state == GameState::MainMenu) {
+        renderMainMenu();
     }
+    else if (state == GameState::Playing) {
+        for (auto& tile : tiles) {
+            window.draw(tile.sprite);
+        }
 
-    // draw score
-    if (fontLoaded) {
-        window.draw(*scoreText);
-    }
-    if (fontLoaded && timerText) {
-        window.draw(*timerText);
-    }
+        if (fontLoaded && scoreText) window.draw(*scoreText);
+        if (fontLoaded && timerText) window.draw(*timerText);
 
-    if (fontLoaded && leaderboardText) {
-        window.draw(*leaderboardText);
+        if (pendingReshuffle && fontLoaded && messageText) {
+            window.draw(*messageText);
+        }
     }
-    // draw win message while waiting to reshuffle
-    if (pendingReshuffle && fontLoaded) {
-        window.draw(*messageText);
+    else if (state == GameState::Leaderboard) {
+        renderLeaderboardScreen();
     }
 
     window.display();

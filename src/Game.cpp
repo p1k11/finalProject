@@ -4,7 +4,7 @@
 #include <random>
 
 Game::Game()
-    : window(sf::VideoMode({ 800, 600 }), "Slide Puzzle")
+    : window(sf::VideoMode({ 800, 600 }), "Slide Puzzle", sf::Style::Titlebar | sf::Style::Close)
 {   
 	// Load resources image and font
     if (!texture.loadFromFile("image.jpg")) {

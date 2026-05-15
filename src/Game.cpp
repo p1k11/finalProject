@@ -79,14 +79,14 @@ void Game::setupMenu() {
     titleText->setString("Slide Puzzle");
     titleText->setCharacterSize(48);
     titleText->setFillColor(sf::Color::White);
-    titleText->setPosition({ 260.f, 100.f });
+    titleText->setPosition({ 360.f, 100.f });
 
     playButton.setSize({ 250.f, 60.f });
-    playButton.setPosition({ 275.f, 230.f });
+    playButton.setPosition({ 375.f, 230.f });
     playButton.setFillColor(sf::Color(80, 80, 80));
 
     leaderboardButton.setSize({ 250.f, 60.f });
-    leaderboardButton.setPosition({ 275.f, 320.f });
+    leaderboardButton.setPosition({ 375.f, 320.f });
     leaderboardButton.setFillColor(sf::Color(80, 80, 80));
 
     backButton.setSize({ 180.f, 50.f });
@@ -97,13 +97,13 @@ void Game::setupMenu() {
     playButtonText->setString("Play Game");
     playButtonText->setCharacterSize(28);
     playButtonText->setFillColor(sf::Color::White);
-    playButtonText->setPosition({ 330.f, 242.f });
+    playButtonText->setPosition({ 430.f, 242.f });
 
     leaderboardButtonText.emplace(font);
     leaderboardButtonText->setString("Leaderboard");
     leaderboardButtonText->setCharacterSize(28);
     leaderboardButtonText->setFillColor(sf::Color::White);
-    leaderboardButtonText->setPosition({ 315.f, 332.f });
+    leaderboardButtonText->setPosition({ 415.f, 332.f });
 
     backButtonText.emplace(font);
     backButtonText->setString("Back");
@@ -150,7 +150,7 @@ void Game::createTiles() {
     tileSize = texture.getSize().x / GRID_SIZE;
     scaleFactor = puzzleDisplaySize / texture.getSize().x;
 
-    float offsetX = 350.f;
+    float offsetX = 250.f;
     float offsetY = (600 - puzzleDisplaySize) / 2.0f;
 
 	// Set empty tile position to bottom right
@@ -195,7 +195,7 @@ void Game::createTiles() {
 void Game::shuffleTiles() {
     std::shuffle(tiles.begin(), tiles.end(), std::mt19937(std::random_device()()));
 
-    float offsetX = 350.f;
+    float offsetX = 250.f;
     float offsetY = (600 - puzzleDisplaySize) / 2.0f;
 
     for (int i = 0; i < static_cast<int>(tiles.size()); i++) {
@@ -241,7 +241,7 @@ void Game::handleClick() {
                 emptyY = oldY;
 
                 // Update visual position
-                float offsetX = 350.f;
+                float offsetX = 250.f;
                 float offsetY = (600 - puzzleDisplaySize) / 2.0f;
 
                 tile.sprite.setPosition({
@@ -286,7 +286,7 @@ void Game::onPuzzleSolved() {
 }
 // Move all tiles to their correct positions to show the solved puzzle before reshuffling
 void Game::solvePuzzle() {
-    float offsetX = 350.f;
+    float offsetX = 250.f;
     float offsetY = (600 - puzzleDisplaySize) / 2.0f;
 
     for (auto& tile : tiles) {
@@ -306,6 +306,7 @@ void Game::handleMenuClick(sf::Vector2f mousePos) {
     if (playButton.getGlobalBounds().contains(mousePos)) {
         score = 0;
         updateScoreText();
+        pausedTimeTotal = 0.0f;
         gameClock.restart();
         shuffleTiles();
         state = GameState::Playing;
@@ -402,8 +403,15 @@ bool Game::checkWin() {
 }
 // Update game state: update timer, handle pending reshuffle after winning, and update timer text
 void Game::update() {
-    elapsedTime = gameClock.getElapsedTime().asSeconds() - pausedTimeTotal;
-    updateTimerText();
+    if (state == GameState::Playing) {
+        elapsedTime = gameClock.getElapsedTime().asSeconds() - pausedTimeTotal;
+
+        if (elapsedTime < 0) {
+            elapsedTime = 0;
+        }
+
+        updateTimerText();
+    }
 
     if (pendingReshuffle) {
         if (reshuffleClock.getElapsedTime().asSeconds() >= reshuffleDelay) {

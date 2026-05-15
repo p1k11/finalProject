@@ -4,7 +4,7 @@
 #include <random>
 
 Game::Game()
-    : window(sf::VideoMode({ 800, 600 }), "Slide Puzzle", sf::Style::Titlebar | sf::Style::Close)
+    : window(sf::VideoMode({ 1000, 600 }), "Slide Puzzle", sf::Style::Titlebar | sf::Style::Close)
 {   
 	// Load resources image and font
     if (!texture.loadFromFile("image.jpg")) {
@@ -112,14 +112,14 @@ void Game::setupMenu() {
     backButtonText->setPosition({ 80.f, 530.f });
 
     pauseButton.setSize({ 120.f, 40.f });
-    pauseButton.setPosition({ 650.f, 10.f });
+    pauseButton.setPosition({ 860.f, 10.f });
     pauseButton.setFillColor(sf::Color(80, 80, 80));
 
     pauseButtonText.emplace(font);
     pauseButtonText->setString("Pause");
     pauseButtonText->setCharacterSize(22);
     pauseButtonText->setFillColor(sf::Color::White);
-    pauseButtonText->setPosition({ 680.f, 15.f });
+    pauseButtonText->setPosition({ 890.f, 15.f });
 
     resumeButton.setSize({ 250.f, 60.f });
     resumeButton.setPosition({ 275.f, 240.f });
@@ -150,7 +150,7 @@ void Game::createTiles() {
     tileSize = texture.getSize().x / GRID_SIZE;
     scaleFactor = puzzleDisplaySize / texture.getSize().x;
 
-    float offsetX = (800 - puzzleDisplaySize) / 2.0f;
+    float offsetX = 350.f;
     float offsetY = (600 - puzzleDisplaySize) / 2.0f;
 
 	// Set empty tile position to bottom right
@@ -195,7 +195,7 @@ void Game::createTiles() {
 void Game::shuffleTiles() {
     std::shuffle(tiles.begin(), tiles.end(), std::mt19937(std::random_device()()));
 
-    float offsetX = (800 - puzzleDisplaySize) / 2.0f;
+    float offsetX = 350.f;
     float offsetY = (600 - puzzleDisplaySize) / 2.0f;
 
     for (int i = 0; i < static_cast<int>(tiles.size()); i++) {
@@ -241,7 +241,7 @@ void Game::handleClick() {
                 emptyY = oldY;
 
                 // Update visual position
-                float offsetX = (800 - puzzleDisplaySize) / 2.0f;
+                float offsetX = 350.f;
                 float offsetY = (600 - puzzleDisplaySize) / 2.0f;
 
                 tile.sprite.setPosition({
@@ -286,7 +286,7 @@ void Game::onPuzzleSolved() {
 }
 // Move all tiles to their correct positions to show the solved puzzle before reshuffling
 void Game::solvePuzzle() {
-    float offsetX = (800 - puzzleDisplaySize) / 2.0f;
+    float offsetX = 350.f;
     float offsetY = (600 - puzzleDisplaySize) / 2.0f;
 
     for (auto& tile : tiles) {
@@ -525,7 +525,7 @@ void Game::renderPauseScreen() {
 
     // dark overlay effect
     sf::RectangleShape overlay;
-    overlay.setSize({ 800.f, 600.f });
+    overlay.setSize({ 1000.f, 600.f });
     overlay.setFillColor(sf::Color(0, 0, 0, 150));
 
     window.draw(overlay);
@@ -557,6 +557,12 @@ void Game::render() {
 
         if (pendingReshuffle && fontLoaded && messageText) {
             window.draw(*messageText);
+        }
+
+        window.draw(pauseButton);
+
+        if (pauseButtonText) {
+            window.draw(*pauseButtonText);
         }
     }
     else if (state == GameState::Leaderboard) {

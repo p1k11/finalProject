@@ -54,6 +54,9 @@ private:
     sf::Clock gameClock;
     float elapsedTime = 0.0f;
 
+    float pausedTimeTotal = 0.0f;
+    sf::Clock pauseClock;
+
 	// text to display timer and leaderboard
     std::optional<sf::Text> timerText;
     std::optional<sf::Text> leaderboardText;
@@ -94,11 +97,14 @@ private:
     void updateLeaderboardText();
     void onPuzzleSolved();
 
+    // game states
     enum class GameState {
         MainMenu,
         Playing,
+        Paused,
         Leaderboard
     };
+
     //main menu stuff
     GameState state = GameState::MainMenu;
 
@@ -106,10 +112,21 @@ private:
     sf::RectangleShape leaderboardButton;
     sf::RectangleShape backButton;
 
+    std::optional<sf::Text> pauseText;
+    void renderPauseScreen();
+    sf::RectangleShape pauseButton;
+    sf::RectangleShape resumeButton;
+    sf::RectangleShape pauseMenuButton;
+
+    std::optional<sf::Text> pauseButtonText;
+    std::optional<sf::Text> resumeButtonText;
+    std::optional<sf::Text> pauseMenuButtonText;
+
     std::optional<sf::Text> titleText;
     std::optional<sf::Text> playButtonText;
     std::optional<sf::Text> leaderboardButtonText;
     std::optional<sf::Text> backButtonText;
+
 
     void setupMenu();
     void handleMenuClick(sf::Vector2f mousePos);

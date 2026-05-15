@@ -45,6 +45,13 @@ Game::Game()
         leaderboardText->setFillColor(sf::Color::White);
         leaderboardText->setPosition({ 10.f, 70.f });
 
+		// setup pause text
+        pauseText.emplace(font);
+        pauseText->setString("Paused\nPress P to Resume\nPress M for Menu");
+        pauseText->setCharacterSize(36);
+        pauseText->setFillColor(sf::Color::White);
+        pauseText->setPosition({ 230.f, 220.f });
+
         // load leaderboard data
         loadLeaderboard();
 		// update leaderboard text
@@ -103,6 +110,38 @@ void Game::setupMenu() {
     backButtonText->setCharacterSize(24);
     backButtonText->setFillColor(sf::Color::White);
     backButtonText->setPosition({ 80.f, 530.f });
+
+    pauseButton.setSize({ 120.f, 40.f });
+    pauseButton.setPosition({ 650.f, 10.f });
+    pauseButton.setFillColor(sf::Color(80, 80, 80));
+
+    pauseButtonText.emplace(font);
+    pauseButtonText->setString("Pause");
+    pauseButtonText->setCharacterSize(22);
+    pauseButtonText->setFillColor(sf::Color::White);
+    pauseButtonText->setPosition({ 680.f, 15.f });
+
+    resumeButton.setSize({ 250.f, 60.f });
+    resumeButton.setPosition({ 275.f, 240.f });
+    resumeButton.setFillColor(sf::Color(80, 80, 80));
+
+    pauseMenuButton.setSize({ 250.f, 60.f });
+    pauseMenuButton.setPosition({ 275.f, 330.f });
+    pauseMenuButton.setFillColor(sf::Color(80, 80, 80));
+
+    resumeButtonText.emplace(font);
+    resumeButtonText->setString("Resume");
+    resumeButtonText->setCharacterSize(28);
+    resumeButtonText->setFillColor(sf::Color::White);
+    resumeButtonText->setPosition({ 345.f, 252.f });
+
+    pauseMenuButtonText.emplace(font);
+    pauseMenuButtonText->setString("Main Menu");
+    pauseMenuButtonText->setCharacterSize(28);
+    pauseMenuButtonText->setFillColor(sf::Color::White);
+    pauseMenuButtonText->setPosition({ 320.f, 342.f });
+
+
 }
 // Create tile sprites and set their initial positions based on the original image
 void Game::createTiles() {
@@ -276,10 +315,13 @@ void Game::handleMenuClick(sf::Vector2f mousePos) {
         updateLeaderboardText();
         state = GameState::Leaderboard;
     }
+
+    
 }
 // Process all window events handle mouse clicks, key presses, and window close events
 void Game::processEvents() {
     while (auto event = window.pollEvent()) {
+
         if (event->is<sf::Event::MouseButtonPressed>()) {
             auto mousePos = sf::Vector2f(sf::Mouse::getPosition(window));
 
@@ -287,7 +329,23 @@ void Game::processEvents() {
                 handleMenuClick(mousePos);
             }
             else if (state == GameState::Playing) {
-                handleClick();
+                if (pauseButton.getGlobalBounds().contains(mousePos)) {
+                    state = GameState::Paused;
+                    pauseClock.restart();
+                }
+                else {
+                    handleClick();
+                }
+            }
+            else if (state == GameState::Paused) {
+                if (resumeButton.getGlobalBounds().contains(mousePos)) {
+                    pausedTimeTotal += pauseClock.getElapsedTime().asSeconds();
+                    state = GameState::Playing;
+                }
+
+                if (pauseMenuButton.getGlobalBounds().contains(mousePos)) {
+                    state = GameState::MainMenu;
+                }
             }
             else if (state == GameState::Leaderboard) {
                 if (backButton.getGlobalBounds().contains(mousePos)) {
@@ -295,25 +353,40 @@ void Game::processEvents() {
                 }
             }
         }
+
         if (event->is<sf::Event::Closed>()) {
             window.close();
         }
-        if (event->is<sf::Event::KeyPressed>()) {
 
+        if (event->is<sf::Event::KeyPressed>()) {
             if (auto keyEvent = event->getIf<sf::Event::KeyPressed>()) {
 
-                if (keyEvent->code == sf::Keyboard::Key::W) {
+                if (state == GameState::Playing && keyEvent->code == sf::Keyboard::Key::W) {
                     solvePuzzle();
 
                     if (checkWin()) {
                         onPuzzleSolved();
                     }
                 }
+
+                if (keyEvent->code == sf::Keyboard::Key::P) {
+                    if (state == GameState::Playing) {
+                        state = GameState::Paused;
+                        pauseClock.restart();
+                    }
+                    else if (state == GameState::Paused) {
+                        pausedTimeTotal += pauseClock.getElapsedTime().asSeconds();
+                        state = GameState::Playing;
+                    }
+                }
+
+                if (state == GameState::Paused && keyEvent->code == sf::Keyboard::Key::M) {
+                    state = GameState::MainMenu;
+                }
             }
         }
     }
 }
-
 //winning condition: all tiles in correct position
 bool Game::checkWin() {
     for (auto& tile : tiles) {
@@ -329,7 +402,7 @@ bool Game::checkWin() {
 }
 // Update game state: update timer, handle pending reshuffle after winning, and update timer text
 void Game::update() {
-    elapsedTime = gameClock.getElapsedTime().asSeconds();
+    elapsedTime = gameClock.getElapsedTime().asSeconds() - pausedTimeTotal;
     updateTimerText();
 
     if (pendingReshuffle) {
@@ -437,6 +510,36 @@ void Game::renderLeaderboardScreen() {
 
     if (backButtonText) window.draw(*backButtonText);
 }
+
+void Game::renderPauseScreen() {
+
+    for (auto& tile : tiles) {
+        window.draw(tile.sprite);
+    }
+
+    if (fontLoaded && scoreText)
+        window.draw(*scoreText);
+
+    if (fontLoaded && timerText)
+        window.draw(*timerText);
+
+    // dark overlay effect
+    sf::RectangleShape overlay;
+    overlay.setSize({ 800.f, 600.f });
+    overlay.setFillColor(sf::Color(0, 0, 0, 150));
+
+    window.draw(overlay);
+
+    window.draw(resumeButton);
+    window.draw(pauseMenuButton);
+
+    if (resumeButtonText)
+        window.draw(*resumeButtonText);
+
+    if (pauseMenuButtonText)
+        window.draw(*pauseMenuButtonText);
+}
+
 // Render the game clear the window, draw all tiles, score, timer, leaderboard, and win message if applicable, then display the updated window
 void Game::render() {
     window.clear();
@@ -459,7 +562,9 @@ void Game::render() {
     else if (state == GameState::Leaderboard) {
         renderLeaderboardScreen();
     }
-
+    else if (state == GameState::Paused) {
+        renderPauseScreen();
+    }
     window.display();
 }
 // Update the score text to reflect the current score after a puzzle is solved

@@ -7,7 +7,7 @@ Game::Game()
     : window(sf::VideoMode({ 1000, 600 }), "Slide Puzzle", sf::Style::Titlebar | sf::Style::Close)
 {   
 	// Load resources image and font
-    if (!texture.loadFromFile("image.jpg")) {
+    if (!texture.loadFromFile(imageFiles[selectedImageIndex])) {
         std::cout << "Failed to load image\n";
     }
 
@@ -70,6 +70,27 @@ void Game::run() {
         processEvents();
         update();
         render();
+    }
+}
+void Game::setupImageButtons() {
+    if (!fontLoaded) return;
+
+    imageButtons.clear();
+    imageButtonTexts.clear();
+
+    for (int i = 0; i < static_cast<int>(imageFiles.size()); i++) {
+        sf::RectangleShape button;
+        button.setSize({ 140.f, 45.f });
+        button.setPosition({ 280.f + i * 160.f, 420.f });
+        button.setFillColor(sf::Color(80, 80, 80));
+
+        imageButtons.push_back(button);
+
+        imageButtonTexts.emplace_back(font);
+        imageButtonTexts[i]->setString("Photo " + std::to_string(i + 1));
+        imageButtonTexts[i]->setCharacterSize(20);
+        imageButtonTexts[i]->setFillColor(sf::Color::White);
+        imageButtonTexts[i]->setPosition({ 310.f + i * 160.f, 430.f });
     }
 }
 void Game::setupMenu() {
@@ -141,21 +162,37 @@ void Game::setupMenu() {
     pauseMenuButtonText->setFillColor(sf::Color::White);
     pauseMenuButtonText->setPosition({ 320.f, 342.f });
 
+    setupImageButtons();
+}
+// Load the selected image and create tiles based on it, then shuffle the tiles to start the game
+void Game::loadSelectedImage() {
+    if (!texture.loadFromFile(imageFiles[selectedImageIndex])) {
+        std::cout << "Failed to load selected image\n";
+    }
 
+    createTiles();
+    shuffleTiles();
 }
 // Create tile sprites and set their initial positions based on the original image
 void Game::createTiles() {
     tiles.clear();
 
-    tileSize = texture.getSize().x / GRID_SIZE;
-    scaleFactor = puzzleDisplaySize / texture.getSize().x;
+    auto textureSize = texture.getSize();
+
+    int cropSize = std::min(textureSize.x, textureSize.y);
+
+    int cropX = (textureSize.x - cropSize) / 2;
+    int cropY = (textureSize.y - cropSize) / 2;
+
+    tileSize = cropSize / GRID_SIZE;
+    scaleFactor = puzzleDisplaySize / cropSize;
 
     float offsetX = 250.f;
     float offsetY = (600 - puzzleDisplaySize) / 2.0f;
 
-	// Set empty tile position to bottom right
     emptyX = GRID_SIZE - 1;
     emptyY = GRID_SIZE - 1;
+
 
 	// Create tiles for all grid positions except the bottom right (empty space)
     for (int y = 0; y < GRID_SIZE; y++) {
@@ -303,12 +340,23 @@ void Game::solvePuzzle() {
     emptyY = GRID_SIZE - 1;
 }
 void Game::handleMenuClick(sf::Vector2f mousePos) {
+
+    for (int i = 0; i < static_cast<int>(imageButtons.size()); i++) {
+        if (imageButtons[i].getGlobalBounds().contains(mousePos)) {
+            selectedImageIndex = i;
+            std::cout << "Selected image: " << imageFiles[i] << "\n";
+        }
+    }
+
     if (playButton.getGlobalBounds().contains(mousePos)) {
         score = 0;
         updateScoreText();
+
         pausedTimeTotal = 0.0f;
         gameClock.restart();
-        shuffleTiles();
+
+        loadSelectedImage();
+
         state = GameState::Playing;
     }
 
@@ -507,6 +555,20 @@ void Game::renderMainMenu() {
 
     if (playButtonText) window.draw(*playButtonText);
     if (leaderboardButtonText) window.draw(*leaderboardButtonText);
+    for (int i = 0; i < static_cast<int>(imageButtons.size()); i++) {
+        if (i == selectedImageIndex) {
+            imageButtons[i].setFillColor(sf::Color(120, 120, 120));
+        }
+        else {
+            imageButtons[i].setFillColor(sf::Color(80, 80, 80));
+        }
+
+        window.draw(imageButtons[i]);
+
+        if (imageButtonTexts[i]) {
+            window.draw(*imageButtonTexts[i]);
+        }
+    }
 }
 
 void Game::renderLeaderboardScreen() {

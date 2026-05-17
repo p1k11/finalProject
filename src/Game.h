@@ -132,6 +132,22 @@ private:
     void handleMenuClick(sf::Vector2f mousePos);
     void renderMainMenu();
     void renderLeaderboardScreen();
+
+
+	//adding the personal photography aspect: load the image, create tiles from it, and render the tiles
+    std::vector<std::string> imageFiles = {
+    "image.jpg",
+    "image2.jpg",
+    "image3.jpg"
+    };
+
+    int selectedImageIndex = 0;
+
+    std::vector<sf::RectangleShape> imageButtons;
+    std::vector<std::optional<sf::Text>> imageButtonTexts;
+
+    void loadSelectedImage();
+    void setupImageButtons();
 public:
 	// constructor and main loop
     Game();

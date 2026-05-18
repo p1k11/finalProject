@@ -72,6 +72,7 @@ void Game::run() {
         render();
     }
 }
+//buttons for selecting images in the main menu
 void Game::setupImageButtons() {
     if (!fontLoaded) return;
 
@@ -93,6 +94,7 @@ void Game::setupImageButtons() {
         imageButtonTexts[i]->setPosition({ 310.f + i * 160.f, 430.f });
     }
 }
+//setting up menu anf title
 void Game::setupMenu() {
     if (!fontLoaded) return;
 

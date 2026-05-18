@@ -26,7 +26,7 @@ private:
 	sf::Font font;// flag to check if font loaded successfully
     bool fontLoaded = false;
 	std::optional<sf::Text> scoreText;// text to display score
-	std::optional<sf::Text> messageText;// text to display messages (like "Puzzle solved!")
+	std::optional<sf::Text> messageText;// text to display messages
     // delay before reshuffling so user can see solved board
     bool pendingReshuffle = false;
     sf::Clock reshuffleClock;
@@ -70,7 +70,7 @@ private:
 	// leaderboard data
     std::vector<LeaderboardEntry> leaderboard;
 
-    //winning condition: all tiles in correct position
+    //winning condition all tiles in correct position
     bool checkWin();
 	// game state
     std::vector<Tile> tiles;
@@ -134,7 +134,7 @@ private:
     void renderLeaderboardScreen();
 
 
-	//adding the personal photography aspect: load the image, create tiles from it, and render the tiles
+	//load the image, create tiles from it, and render the tiles
     std::vector<std::string> imageFiles = {
     "image.jpg",
     "image2.jpg",

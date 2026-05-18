@@ -16,7 +16,7 @@ private:
 	float scaleFactor;// how much to scale the original tile size to fit the display size
 
 	// 3x3 grid means the game has 8 tiles + 1 empty space
-	const int GRID_SIZE = 3;// 3x3 grid
+    int gridSize = 3;// 3x3 grid
 	int tileSize;// size of each tile in the original image
 	int emptyX = 0;// position of the empty tile
     int emptyY = 0;// position of the empty tile
@@ -127,6 +127,10 @@ private:
     std::optional<sf::Text> leaderboardButtonText;
     std::optional<sf::Text> backButtonText;
 
+    std::vector<sf::RectangleShape> difficultyButtons;
+    std::vector<std::optional<sf::Text>> difficultyButtonTexts;
+
+    void setupDifficultyButtons();
 
     void setupMenu();
     void handleMenuClick(sf::Vector2f mousePos);

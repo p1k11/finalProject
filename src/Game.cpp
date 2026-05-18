@@ -94,7 +94,7 @@ void Game::setupImageButtons() {
         imageButtonTexts[i]->setPosition({ 310.f + i * 160.f, 430.f });
     }
 }
-//setting up menu anf title
+//setting up menus anf title
 void Game::setupMenu() {
     if (!fontLoaded) return;
 
@@ -165,8 +165,9 @@ void Game::setupMenu() {
     pauseMenuButtonText->setPosition({ 320.f, 342.f });
 
     setupImageButtons();
+    setupDifficultyButtons();
 }
-// Load the selected image and create tiles based on it, then shuffle the tiles to start the game
+// Load the selected image and create tiles based on it then shuffle the tiles to start the game
 void Game::loadSelectedImage() {
     if (!texture.loadFromFile(imageFiles[selectedImageIndex])) {
         std::cout << "Failed to load selected image\n";
@@ -186,19 +187,19 @@ void Game::createTiles() {
     int cropX = (textureSize.x - cropSize) / 2;
     int cropY = (textureSize.y - cropSize) / 2;
 
-    tileSize = cropSize / GRID_SIZE;
+    tileSize = cropSize / gridSize;
     scaleFactor = puzzleDisplaySize / cropSize;
 
     float offsetX = 250.f;
     float offsetY = (600 - puzzleDisplaySize) / 2.0f;
 
-    emptyX = GRID_SIZE - 1;
-    emptyY = GRID_SIZE - 1;
+    emptyX = gridSize - 1;
+    emptyY = gridSize - 1;
 
 
 	// Create tiles for all grid positions except the bottom right (empty space)
-    for (int y = 0; y < GRID_SIZE; y++) {
-        for (int x = 0; x < GRID_SIZE; x++) {
+    for (int y = 0; y < gridSize; y++) {
+        for (int x = 0; x < gridSize; x++) {
 
             // Skip bottom right tile (empty space)
             if (x == emptyX && y == emptyY)
@@ -238,8 +239,8 @@ void Game::shuffleTiles() {
     float offsetY = (600 - puzzleDisplaySize) / 2.0f;
 
     for (int i = 0; i < static_cast<int>(tiles.size()); i++) {
-        int x = i % GRID_SIZE;
-        int y = i / GRID_SIZE;
+        int x = i % gridSize;
+        int y = i / gridSize;
 
         tiles[i].gridX = x;
         tiles[i].gridY = y;
@@ -251,8 +252,8 @@ void Game::shuffleTiles() {
     }
 
     // reset empty tile to last position
-    emptyX = GRID_SIZE - 1;
-    emptyY = GRID_SIZE - 1;
+    emptyX = gridSize - 1;
+    emptyY = gridSize - 1;
 }
 
 // Handle mouse click events to move tiles if they are adjacent to the empty space
@@ -297,7 +298,7 @@ void Game::handleClick() {
         }
     }
 }
-// Handle actions when the puzzle is solved: update score, leaderboard, and display message before reshuffling
+// Handle actions when the puzzle is solved update score leaderboard and display message before reshuffling
 void Game::onPuzzleSolved() {
     score++;
     updateScoreText();
@@ -338,8 +339,8 @@ void Game::solvePuzzle() {
             });
     }
 
-    emptyX = GRID_SIZE - 1;
-    emptyY = GRID_SIZE - 1;
+    emptyX = gridSize - 1;
+    emptyY = gridSize - 1;
 }
 void Game::handleMenuClick(sf::Vector2f mousePos) {
 
@@ -347,6 +348,16 @@ void Game::handleMenuClick(sf::Vector2f mousePos) {
         if (imageButtons[i].getGlobalBounds().contains(mousePos)) {
             selectedImageIndex = i;
             std::cout << "Selected image: " << imageFiles[i] << "\n";
+        }
+    }
+
+    for (int i = 0; i < static_cast<int>(difficultyButtons.size()); i++) {
+        if (difficultyButtons[i].getGlobalBounds().contains(mousePos)) {
+            if (i == 0) gridSize = 3;
+            if (i == 1) gridSize = 4;
+            if (i == 2) gridSize = 5;
+
+            std::cout << "Selected grid size: " << gridSize << "x" << gridSize << "\n";
         }
     }
 
@@ -369,7 +380,7 @@ void Game::handleMenuClick(sf::Vector2f mousePos) {
 
     
 }
-// Process all window events handle mouse clicks, key presses, and window close events
+// Process all window events handle mouse clicks key presses and window close events
 void Game::processEvents() {
     while (auto event = window.pollEvent()) {
 
@@ -438,7 +449,7 @@ void Game::processEvents() {
         }
     }
 }
-//winning condition: all tiles in correct position
+//winning condition all tiles in correct position
 bool Game::checkWin() {
     for (auto& tile : tiles) {
 
@@ -451,7 +462,7 @@ bool Game::checkWin() {
 
     return true;
 }
-// Update game state: update timer, handle pending reshuffle after winning, and update timer text
+// Update game state update timer handle pending reshuffle after winning and update timer text
 void Game::update() {
     if (state == GameState::Playing) {
         elapsedTime = gameClock.getElapsedTime().asSeconds() - pausedTimeTotal;
@@ -546,7 +557,34 @@ void Game::updateLeaderboardText() {
 
     leaderboardText->setString(text);
 }
+//selecting grid size
+void Game::setupDifficultyButtons() {
+    if (!fontLoaded) return;
 
+    difficultyButtons.clear();
+    difficultyButtonTexts.clear();
+
+    std::vector<std::string> labels = {
+        "Easy 3x3",
+        "Medium 4x4",
+        "Hard 5x5"
+    };
+
+    for (int i = 0; i < 3; i++) {
+        sf::RectangleShape button;
+        button.setSize({ 170.f, 45.f });
+        button.setPosition({ 240.f + i * 190.f, 475.f });
+        button.setFillColor(sf::Color(80, 80, 80));
+
+        difficultyButtons.push_back(button);
+
+        difficultyButtonTexts.emplace_back(font);
+        difficultyButtonTexts[i]->setString(labels[i]);
+        difficultyButtonTexts[i]->setCharacterSize(18);
+        difficultyButtonTexts[i]->setFillColor(sf::Color::White);
+        difficultyButtonTexts[i]->setPosition({ 270.f + i * 190.f, 487.f });
+    }
+}
 void Game::renderMainMenu() {
     if (!fontLoaded) return;
 
@@ -569,6 +607,22 @@ void Game::renderMainMenu() {
 
         if (imageButtonTexts[i]) {
             window.draw(*imageButtonTexts[i]);
+        }
+    }
+    for (int i = 0; i < static_cast<int>(difficultyButtons.size()); i++) {
+        int buttonGridSize = 3 + i;
+
+        if (buttonGridSize == gridSize) {
+            difficultyButtons[i].setFillColor(sf::Color(120, 120, 120));
+        }
+        else {
+            difficultyButtons[i].setFillColor(sf::Color(80, 80, 80));
+        }
+
+        window.draw(difficultyButtons[i]);
+
+        if (difficultyButtonTexts[i]) {
+            window.draw(*difficultyButtonTexts[i]);
         }
     }
 }

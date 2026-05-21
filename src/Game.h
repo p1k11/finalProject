@@ -1,6 +1,7 @@
 #pragma once
 #include "MainMenu.h"
 #include "EndScreen.h"
+#include "PauseMenu.h"
 #include <SFML/Graphics.hpp>
 #include <vector>
 #include <algorithm>
@@ -28,12 +29,6 @@ private:
 	sf::Font font;// flag to check if font loaded successfully
     bool fontLoaded = false;
 	std::optional<sf::Text> scoreText;// text to display score
-	std::optional<sf::Text> messageText;// text to display messages
-    // delay before reshuffling so user can see solved board
-    bool pendingReshuffle = false;
-    sf::Clock reshuffleClock;
-    float reshuffleDelay = 1.0f; // seconds
-
 	// tile struct to hold sprite and grid position
     struct Tile {
         sf::Sprite sprite;
@@ -64,6 +59,7 @@ private:
     std::optional<sf::Text> leaderboardText;
     std::optional<MainMenu> mainMenu;
     std::optional<EndScreen> endScreen;
+    std::optional<PauseMenu> pauseMenu;
 
 	// struct to hold leaderboard entries
     struct LeaderboardEntry {
@@ -117,26 +113,18 @@ private:
 
     std::optional<sf::Text> pauseText;
     void renderPauseScreen();
+ 
     sf::RectangleShape pauseButton;
-    sf::RectangleShape resumeButton;
-    sf::RectangleShape pauseMenuButton;
-
+    
     std::optional<sf::Text> pauseButtonText;
-    std::optional<sf::Text> resumeButtonText;
-    std::optional<sf::Text> pauseMenuButtonText;
-
     std::optional<sf::Text> backButtonText;
-
-    void setupDifficultyButtons(); // (leave if used for pause/menu adjustments; otherwise can be removed)
+    std::optional<sf::Text> messageText;
 
     // NOTE: menu setup/render functions moved into MainMenu
     void handleMenuClick(sf::Vector2f mousePos); // updated to use mainMenu
 
     //the game was creating unsolvable puzzles in the shuffle
     void moveTileToEmpty(Tile& tile);
-    void shuffleSolvable();
-
-
 	//load the image, create tiles from it, and render the tiles
     std::vector<std::string> imageFiles = {
     "image.jpg",

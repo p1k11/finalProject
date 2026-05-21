@@ -21,6 +21,13 @@ add_executable(main
     src/MainMenu.cpp
     src/EndScreen.cpp
     src/EndScreen.h
+    src/PauseMenu.h
+    src/PauseMenu.cpp
+
+    
+
+	
+
     
 )
 # Ensure the root of the source tree is visible for headers like "Game.h"

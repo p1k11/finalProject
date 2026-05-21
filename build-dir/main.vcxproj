@@ -339,6 +339,8 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
     <ClCompile Include="C:\Users\gough\Documents\GitHub\finalProject\src\MainMenu.cpp" />
     <ClCompile Include="C:\Users\gough\Documents\GitHub\finalProject\src\EndScreen.cpp" />
     <ClInclude Include="C:\Users\gough\Documents\GitHub\finalProject\src\EndScreen.h" />
+    <ClInclude Include="C:\Users\gough\Documents\GitHub\finalProject\src\PauseMenu.h" />
+    <ClCompile Include="C:\Users\gough\Documents\GitHub\finalProject\src\PauseMenu.cpp" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

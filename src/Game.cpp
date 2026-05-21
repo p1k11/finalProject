@@ -45,23 +45,28 @@ Game::Game()
         leaderboardText->setFillColor(sf::Color::White);
         leaderboardText->setPosition({ 10.f, 70.f });
 
-		// setup pause text
-        pauseText.emplace(font);
-        pauseText->setString("Paused\nPress P to Resume\nPress M for Menu");
-        pauseText->setCharacterSize(36);
-        pauseText->setFillColor(sf::Color::White);
-        pauseText->setPosition({ 230.f, 220.f });
+        pauseButton.setSize({ 120.f, 40.f });
+        pauseButton.setPosition({ 860.f, 10.f });
+        pauseButton.setFillColor(sf::Color(80, 80, 80));
+
+        pauseButtonText.emplace(font);
+        pauseButtonText->setString("Pause");
+        pauseButtonText->setCharacterSize(22);
+        pauseButtonText->setFillColor(sf::Color::White);
+        pauseButtonText->setPosition({ 890.f, 15.f });
 
         // load leaderboard data
         loadLeaderboard();
 		// update leaderboard text
         updateLeaderboardText();
 
-        // initialize the separated main menu
+		// initialize the separated main menu and other separate screens
         mainMenu.emplace(font);
         mainMenu->setup(imageFiles);
         endScreen.emplace(font);
         endScreen->setup();
+        pauseMenu.emplace(font);
+        pauseMenu->setup();
     }
 	// initialize game state
     createTiles();
@@ -113,24 +118,6 @@ void Game::onPuzzleSolved() {
 
     addScoreToLeaderboard();
 
-    std::cout << "Puzzle solved!\n";
-    std::cout << "Score: " << score << "\n";
-
-    pendingReshuffle = true;
-    reshuffleClock.restart();
-
-    if (fontLoaded && messageText) {
-        messageText->setString("Puzzle solved!");
-
-        sf::FloatRect bounds = messageText->getLocalBounds();
-
-        messageText->setOrigin({
-            bounds.position.x + bounds.size.x / 2.f,
-            bounds.position.y + bounds.size.y / 2.f
-            });
-
-        messageText->setPosition({ 800.f / 2.f, 600.f / 2.f });
-    }
     if (endScreen) {
         endScreen->updateText(score, elapsedTime);
     }
@@ -219,7 +206,7 @@ void Game::moveTileToEmpty(Tile& tile) {
 void Game::handleMenuClick(sf::Vector2f mousePos) {
     if (!mainMenu) return;
 
-    // image buttons (use MainMenu's imageButtons)
+    // image buttons 
     for (int i = 0; i < static_cast<int>(mainMenu->imageButtons.size()); i++) {
         if (mainMenu->imageButtons[i].getGlobalBounds().contains(mousePos)) {
             selectedImageIndex = i;
@@ -227,7 +214,7 @@ void Game::handleMenuClick(sf::Vector2f mousePos) {
         }
     }
 
-    // difficulty buttons (use MainMenu's difficultyButtons)
+    // difficulty buttons 
     for (int i = 0; i < static_cast<int>(mainMenu->difficultyButtons.size()); i++) {
         if (mainMenu->difficultyButtons[i].getGlobalBounds().contains(mousePos)) {
             if (i == 0) gridSize = 3;
@@ -238,7 +225,7 @@ void Game::handleMenuClick(sf::Vector2f mousePos) {
         }
     }
 
-    // play / leaderboard buttons (use MainMenu's shapes)
+    // play / leaderboard buttons use MainMenu's shapes
     if (mainMenu->playButton.getGlobalBounds().contains(mousePos)) {
         score = 0;
         updateScoreText();
@@ -320,12 +307,12 @@ void Game::processEvents() {
                 }
             }
             else if (state == GameState::Paused) {
-                if (resumeButton.getGlobalBounds().contains(mousePos)) {
+                if (pauseMenu && pauseMenu->resumeButton.getGlobalBounds().contains(mousePos)) {
                     pausedTimeTotal += pauseClock.getElapsedTime().asSeconds();
                     state = GameState::Playing;
                 }
 
-                if (pauseMenuButton.getGlobalBounds().contains(mousePos)) {
+                if (pauseMenu && pauseMenu->mainMenuButton.getGlobalBounds().contains(mousePos)) {
                     state = GameState::MainMenu;
                 }
             }
@@ -404,17 +391,6 @@ void Game::update() {
         }
 
         updateTimerText();
-    }
-
-    if (pendingReshuffle) {
-        if (reshuffleClock.getElapsedTime().asSeconds() >= reshuffleDelay) {
-            shuffleTiles();
-            pendingReshuffle = false;
-
-            if (fontLoaded && messageText) {
-                messageText->setString("");
-            }
-        }
     }
 }
 
@@ -501,32 +477,16 @@ void Game::renderLeaderboardScreen() {
 }
 
 void Game::renderPauseScreen() {
-
     for (auto& tile : tiles) {
         window.draw(tile.sprite);
     }
 
-    if (fontLoaded && scoreText)
-        window.draw(*scoreText);
+    if (fontLoaded && scoreText) window.draw(*scoreText);
+    if (fontLoaded && timerText) window.draw(*timerText);
 
-    if (fontLoaded && timerText)
-        window.draw(*timerText);
-
-    // dark overlay effect
-    sf::RectangleShape overlay;
-    overlay.setSize({ 1000.f, 600.f });
-    overlay.setFillColor(sf::Color(0, 0, 0, 150));
-
-    window.draw(overlay);
-
-    window.draw(resumeButton);
-    window.draw(pauseMenuButton);
-
-    if (resumeButtonText)
-        window.draw(*resumeButtonText);
-
-    if (pauseMenuButtonText)
-        window.draw(*pauseMenuButtonText);
+    if (pauseMenu) {
+        pauseMenu->render(window);
+    }
 }
 
 // Render the game clear the window, draw all tiles, score, timer, leaderboard, and win message if applicable, then display the updated window
@@ -545,10 +505,6 @@ void Game::render() {
 
         if (fontLoaded && scoreText) window.draw(*scoreText);
         if (fontLoaded && timerText) window.draw(*timerText);
-
-        if (pendingReshuffle && fontLoaded && messageText) {
-            window.draw(*messageText);
-        }
 
         window.draw(pauseButton);
 

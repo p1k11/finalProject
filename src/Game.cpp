@@ -56,8 +56,13 @@ Game::Game()
         loadLeaderboard();
 		// update leaderboard text
         updateLeaderboardText();
+
+        // initialize the separated main menu
+        mainMenu.emplace(font);
+        mainMenu->setup(imageFiles);
+        endScreen.emplace(font);
+        endScreen->setup();
     }
-    setupMenu();
 	// initialize game state
     createTiles();
 	// shuffle tiles to start the game
@@ -71,189 +76,6 @@ void Game::run() {
         update();
         render();
     }
-}
-//buttons for selecting images in the main menu
-void Game::setupImageButtons() {
-    if (!fontLoaded) return;
-
-    imageButtons.clear();
-    imageButtonTexts.clear();
-
-    for (int i = 0; i < static_cast<int>(imageFiles.size()); i++) {
-        sf::RectangleShape button;
-        button.setSize({ 140.f, 45.f });
-        button.setPosition({ 280.f + i * 160.f, 420.f });
-        button.setFillColor(sf::Color(80, 80, 80));
-
-        imageButtons.push_back(button);
-
-        imageButtonTexts.emplace_back(font);
-        imageButtonTexts[i]->setString("Photo " + std::to_string(i + 1));
-        imageButtonTexts[i]->setCharacterSize(20);
-        imageButtonTexts[i]->setFillColor(sf::Color::White);
-        imageButtonTexts[i]->setPosition({ 310.f + i * 160.f, 430.f });
-    }
-}
-//setting up menus anf title
-void Game::setupMenu() {
-    if (!fontLoaded) return;
-
-    titleText.emplace(font);
-    titleText->setString("Slide Puzzle");
-    titleText->setCharacterSize(48);
-    titleText->setFillColor(sf::Color::White);
-    titleText->setPosition({ 360.f, 100.f });
-
-    playButton.setSize({ 250.f, 60.f });
-    playButton.setPosition({ 375.f, 230.f });
-    playButton.setFillColor(sf::Color(80, 80, 80));
-
-    leaderboardButton.setSize({ 250.f, 60.f });
-    leaderboardButton.setPosition({ 375.f, 320.f });
-    leaderboardButton.setFillColor(sf::Color(80, 80, 80));
-
-    backButton.setSize({ 180.f, 50.f });
-    backButton.setPosition({ 20.f, 520.f });
-    backButton.setFillColor(sf::Color(80, 80, 80));
-
-    playButtonText.emplace(font);
-    playButtonText->setString("Play Game");
-    playButtonText->setCharacterSize(28);
-    playButtonText->setFillColor(sf::Color::White);
-    playButtonText->setPosition({ 430.f, 242.f });
-
-    leaderboardButtonText.emplace(font);
-    leaderboardButtonText->setString("Leaderboard");
-    leaderboardButtonText->setCharacterSize(28);
-    leaderboardButtonText->setFillColor(sf::Color::White);
-    leaderboardButtonText->setPosition({ 415.f, 332.f });
-
-    backButtonText.emplace(font);
-    backButtonText->setString("Back");
-    backButtonText->setCharacterSize(24);
-    backButtonText->setFillColor(sf::Color::White);
-    backButtonText->setPosition({ 80.f, 530.f });
-
-    pauseButton.setSize({ 120.f, 40.f });
-    pauseButton.setPosition({ 860.f, 10.f });
-    pauseButton.setFillColor(sf::Color(80, 80, 80));
-
-    pauseButtonText.emplace(font);
-    pauseButtonText->setString("Pause");
-    pauseButtonText->setCharacterSize(22);
-    pauseButtonText->setFillColor(sf::Color::White);
-    pauseButtonText->setPosition({ 890.f, 15.f });
-
-    resumeButton.setSize({ 250.f, 60.f });
-    resumeButton.setPosition({ 275.f, 240.f });
-    resumeButton.setFillColor(sf::Color(80, 80, 80));
-
-    pauseMenuButton.setSize({ 250.f, 60.f });
-    pauseMenuButton.setPosition({ 275.f, 330.f });
-    pauseMenuButton.setFillColor(sf::Color(80, 80, 80));
-
-    resumeButtonText.emplace(font);
-    resumeButtonText->setString("Resume");
-    resumeButtonText->setCharacterSize(28);
-    resumeButtonText->setFillColor(sf::Color::White);
-    resumeButtonText->setPosition({ 345.f, 252.f });
-
-    pauseMenuButtonText.emplace(font);
-    pauseMenuButtonText->setString("Main Menu");
-    pauseMenuButtonText->setCharacterSize(28);
-    pauseMenuButtonText->setFillColor(sf::Color::White);
-    pauseMenuButtonText->setPosition({ 320.f, 342.f });
-
-    setupImageButtons();
-    setupDifficultyButtons();
-}
-// Load the selected image and create tiles based on it then shuffle the tiles to start the game
-void Game::loadSelectedImage() {
-    if (!texture.loadFromFile(imageFiles[selectedImageIndex])) {
-        std::cout << "Failed to load selected image\n";
-    }
-
-    createTiles();
-    shuffleTiles();
-}
-// Create tile sprites and set their initial positions based on the original image
-void Game::createTiles() {
-    tiles.clear();
-
-    auto textureSize = texture.getSize();
-
-    int cropSize = std::min(textureSize.x, textureSize.y);
-
-    int cropX = (textureSize.x - cropSize) / 2;
-    int cropY = (textureSize.y - cropSize) / 2;
-
-    tileSize = cropSize / gridSize;
-    scaleFactor = puzzleDisplaySize / cropSize;
-
-    float offsetX = 250.f;
-    float offsetY = (600 - puzzleDisplaySize) / 2.0f;
-
-    emptyX = gridSize - 1;
-    emptyY = gridSize - 1;
-
-
-	// Create tiles for all grid positions except the bottom right (empty space)
-    for (int y = 0; y < gridSize; y++) {
-        for (int x = 0; x < gridSize; x++) {
-
-            // Skip bottom right tile (empty space)
-            if (x == emptyX && y == emptyY)
-                continue;
-
-            Tile tile(texture, x, y);
-
-            tile.sprite = sf::Sprite(texture);
-
-            tile.sprite.setTextureRect(sf::IntRect({
-                x * tileSize,
-                y * tileSize
-                }, {
-                    tileSize,
-                    tileSize
-                }));
-
-                tile.sprite.setScale({ scaleFactor, scaleFactor });
-
-                tile.gridX = x;
-                tile.gridY = y;
-
-                tile.sprite.setPosition({
-                    offsetX + x * tileSize * scaleFactor,
-                    offsetY + y * tileSize * scaleFactor
-                    });
-				// Store tile in game state
-                tiles.push_back(tile);
-        }
-    }
-}
-// Shuffle tiles randomly and update their grid positions and visual positions accordingly
-void Game::shuffleTiles() {
-    std::shuffle(tiles.begin(), tiles.end(), std::mt19937(std::random_device()()));
-
-    float offsetX = 250.f;
-    float offsetY = (600 - puzzleDisplaySize) / 2.0f;
-
-    for (int i = 0; i < static_cast<int>(tiles.size()); i++) {
-        int x = i % gridSize;
-        int y = i / gridSize;
-
-        tiles[i].gridX = x;
-        tiles[i].gridY = y;
-
-        tiles[i].sprite.setPosition({
-            offsetX + x * tileSize * scaleFactor,
-            offsetY + y * tileSize * scaleFactor
-            });
-    }
-
-    // reset empty tile to last position
-    emptyX = gridSize - 1;
-    emptyY = gridSize - 1;
 }
 
 // Handle mouse click events to move tiles if they are adjacent to the empty space
@@ -271,23 +93,8 @@ void Game::handleClick() {
             if (dx + dy == 1) {
 
                 // Move tile into empty space
-                int oldX = tile.gridX;
-                int oldY = tile.gridY;
+                moveTileToEmpty(tile);
 
-                tile.gridX = emptyX;
-                tile.gridY = emptyY;
-
-                emptyX = oldX;
-                emptyY = oldY;
-
-                // Update visual position
-                float offsetX = 250.f;
-                float offsetY = (600 - puzzleDisplaySize) / 2.0f;
-
-                tile.sprite.setPosition({
-                    offsetX + tile.gridX * tileSize * scaleFactor,
-                    offsetY + tile.gridY * tileSize * scaleFactor
-                    });
             }
 			// Check for win condition after move
             if (checkWin()) {
@@ -298,6 +105,7 @@ void Game::handleClick() {
         }
     }
 }
+
 // Handle actions when the puzzle is solved update score leaderboard and display message before reshuffling
 void Game::onPuzzleSolved() {
     score++;
@@ -323,7 +131,13 @@ void Game::onPuzzleSolved() {
 
         messageText->setPosition({ 800.f / 2.f, 600.f / 2.f });
     }
+    if (endScreen) {
+        endScreen->updateText(score, elapsedTime);
+    }
+
+    state = GameState::EndScreen;
 }
+
 // Move all tiles to their correct positions to show the solved puzzle before reshuffling
 void Game::solvePuzzle() {
     float offsetX = 250.f;
@@ -342,17 +156,80 @@ void Game::solvePuzzle() {
     emptyX = gridSize - 1;
     emptyY = gridSize - 1;
 }
-void Game::handleMenuClick(sf::Vector2f mousePos) {
+void Game::createTiles() {
+    tiles.clear();
 
-    for (int i = 0; i < static_cast<int>(imageButtons.size()); i++) {
-        if (imageButtons[i].getGlobalBounds().contains(mousePos)) {
+    auto textureSize = texture.getSize();
+
+    int cropSize = std::min(textureSize.x, textureSize.y);
+    int cropX = (textureSize.x - cropSize) / 2;
+    int cropY = (textureSize.y - cropSize) / 2;
+
+    tileSize = cropSize / gridSize;
+    scaleFactor = puzzleDisplaySize / cropSize;
+
+    float offsetX = 250.f;
+    float offsetY = (600 - puzzleDisplaySize) / 2.0f;
+
+    emptyX = gridSize - 1;
+    emptyY = gridSize - 1;
+
+    for (int y = 0; y < gridSize; y++) {
+        for (int x = 0; x < gridSize; x++) {
+            if (x == emptyX && y == emptyY)
+                continue;
+
+            Tile tile(texture, x, y);
+
+            tile.sprite.setTextureRect(sf::IntRect(
+                { cropX + x * tileSize, cropY + y * tileSize },
+                { tileSize, tileSize }
+            ));
+
+            tile.sprite.setScale({ scaleFactor, scaleFactor });
+
+            tile.sprite.setPosition({
+                offsetX + x * tileSize * scaleFactor,
+                offsetY + y * tileSize * scaleFactor
+                });
+
+            tiles.push_back(tile);
+        }
+    }
+}
+
+void Game::moveTileToEmpty(Tile& tile) {
+    int oldX = tile.gridX;
+    int oldY = tile.gridY;
+
+    tile.gridX = emptyX;
+    tile.gridY = emptyY;
+
+    emptyX = oldX;
+    emptyY = oldY;
+
+    float offsetX = 250.f;
+    float offsetY = (600 - puzzleDisplaySize) / 2.0f;
+
+    tile.sprite.setPosition({
+        offsetX + tile.gridX * tileSize * scaleFactor,
+        offsetY + tile.gridY * tileSize * scaleFactor
+        });
+}
+void Game::handleMenuClick(sf::Vector2f mousePos) {
+    if (!mainMenu) return;
+
+    // image buttons (use MainMenu's imageButtons)
+    for (int i = 0; i < static_cast<int>(mainMenu->imageButtons.size()); i++) {
+        if (mainMenu->imageButtons[i].getGlobalBounds().contains(mousePos)) {
             selectedImageIndex = i;
             std::cout << "Selected image: " << imageFiles[i] << "\n";
         }
     }
 
-    for (int i = 0; i < static_cast<int>(difficultyButtons.size()); i++) {
-        if (difficultyButtons[i].getGlobalBounds().contains(mousePos)) {
+    // difficulty buttons (use MainMenu's difficultyButtons)
+    for (int i = 0; i < static_cast<int>(mainMenu->difficultyButtons.size()); i++) {
+        if (mainMenu->difficultyButtons[i].getGlobalBounds().contains(mousePos)) {
             if (i == 0) gridSize = 3;
             if (i == 1) gridSize = 4;
             if (i == 2) gridSize = 5;
@@ -361,7 +238,8 @@ void Game::handleMenuClick(sf::Vector2f mousePos) {
         }
     }
 
-    if (playButton.getGlobalBounds().contains(mousePos)) {
+    // play / leaderboard buttons (use MainMenu's shapes)
+    if (mainMenu->playButton.getGlobalBounds().contains(mousePos)) {
         score = 0;
         updateScoreText();
 
@@ -373,12 +251,54 @@ void Game::handleMenuClick(sf::Vector2f mousePos) {
         state = GameState::Playing;
     }
 
-    if (leaderboardButton.getGlobalBounds().contains(mousePos)) {
+    if (mainMenu->leaderboardButton.getGlobalBounds().contains(mousePos)) {
         updateLeaderboardText();
         state = GameState::Leaderboard;
     }
+}
+void Game::loadSelectedImage() {
 
-    
+    if (!texture.loadFromFile(imageFiles[selectedImageIndex])) {
+        std::cout << "Failed to load selected image\n";
+        return;
+    }
+
+    createTiles();
+    shuffleTiles();
+}
+void Game::shuffleTiles() {
+
+    // Start from solved puzzle
+    solvePuzzle();
+
+    std::random_device rd;
+    std::mt19937 gen(rd());
+
+    int shuffleMoves = gridSize * gridSize * 30;
+
+    for (int i = 0; i < shuffleMoves; i++) {
+
+        std::vector<int> movableTileIndexes;
+
+        for (int t = 0; t < static_cast<int>(tiles.size()); t++) {
+
+            int dx = abs(tiles[t].gridX - emptyX);
+            int dy = abs(tiles[t].gridY - emptyY);
+
+            if (dx + dy == 1) {
+                movableTileIndexes.push_back(t);
+            }
+        }
+
+        std::uniform_int_distribution<> dist(
+            0,
+            static_cast<int>(movableTileIndexes.size()) - 1
+        );
+
+        int chosenIndex = movableTileIndexes[dist(gen)];
+
+        moveTileToEmpty(tiles[chosenIndex]);
+    }
 }
 // Process all window events handle mouse clicks key presses and window close events
 void Game::processEvents() {
@@ -411,6 +331,18 @@ void Game::processEvents() {
             }
             else if (state == GameState::Leaderboard) {
                 if (backButton.getGlobalBounds().contains(mousePos)) {
+                    state = GameState::MainMenu;
+                }
+            }
+            else if (state == GameState::EndScreen) {
+                if (endScreen && endScreen->playAgainButton.getGlobalBounds().contains(mousePos)) {
+                    pausedTimeTotal = 0.0f;
+                    gameClock.restart();
+                    loadSelectedImage();
+                    state = GameState::Playing;
+                }
+
+                if (endScreen && endScreen->mainMenuButton.getGlobalBounds().contains(mousePos)) {
                     state = GameState::MainMenu;
                 }
             }
@@ -557,75 +489,6 @@ void Game::updateLeaderboardText() {
 
     leaderboardText->setString(text);
 }
-//selecting grid size
-void Game::setupDifficultyButtons() {
-    if (!fontLoaded) return;
-
-    difficultyButtons.clear();
-    difficultyButtonTexts.clear();
-
-    std::vector<std::string> labels = {
-        "Easy 3x3",
-        "Medium 4x4",
-        "Hard 5x5"
-    };
-
-    for (int i = 0; i < 3; i++) {
-        sf::RectangleShape button;
-        button.setSize({ 170.f, 45.f });
-        button.setPosition({ 240.f + i * 190.f, 475.f });
-        button.setFillColor(sf::Color(80, 80, 80));
-
-        difficultyButtons.push_back(button);
-
-        difficultyButtonTexts.emplace_back(font);
-        difficultyButtonTexts[i]->setString(labels[i]);
-        difficultyButtonTexts[i]->setCharacterSize(18);
-        difficultyButtonTexts[i]->setFillColor(sf::Color::White);
-        difficultyButtonTexts[i]->setPosition({ 270.f + i * 190.f, 487.f });
-    }
-}
-void Game::renderMainMenu() {
-    if (!fontLoaded) return;
-
-    if (titleText) window.draw(*titleText);
-
-    window.draw(playButton);
-    window.draw(leaderboardButton);
-
-    if (playButtonText) window.draw(*playButtonText);
-    if (leaderboardButtonText) window.draw(*leaderboardButtonText);
-    for (int i = 0; i < static_cast<int>(imageButtons.size()); i++) {
-        if (i == selectedImageIndex) {
-            imageButtons[i].setFillColor(sf::Color(120, 120, 120));
-        }
-        else {
-            imageButtons[i].setFillColor(sf::Color(80, 80, 80));
-        }
-
-        window.draw(imageButtons[i]);
-
-        if (imageButtonTexts[i]) {
-            window.draw(*imageButtonTexts[i]);
-        }
-    }
-    for (int i = 0; i < static_cast<int>(difficultyButtons.size()); i++) {
-        int buttonGridSize = 3 + i;
-
-        if (buttonGridSize == gridSize) {
-            difficultyButtons[i].setFillColor(sf::Color(120, 120, 120));
-        }
-        else {
-            difficultyButtons[i].setFillColor(sf::Color(80, 80, 80));
-        }
-
-        window.draw(difficultyButtons[i]);
-
-        if (difficultyButtonTexts[i]) {
-            window.draw(*difficultyButtonTexts[i]);
-        }
-    }
-}
 
 void Game::renderLeaderboardScreen() {
     if (!fontLoaded) return;
@@ -671,7 +534,9 @@ void Game::render() {
     window.clear();
 
     if (state == GameState::MainMenu) {
-        renderMainMenu();
+        if (mainMenu) {
+            mainMenu->render(window, selectedImageIndex, gridSize);
+        }
     }
     else if (state == GameState::Playing) {
         for (auto& tile : tiles) {
@@ -696,6 +561,11 @@ void Game::render() {
     }
     else if (state == GameState::Paused) {
         renderPauseScreen();
+    }
+    else if (state == GameState::EndScreen) {
+        if (endScreen) {
+            endScreen->render(window);
+        }
     }
     window.display();
 }

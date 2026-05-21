@@ -17,6 +17,11 @@ add_executable(main
     src/main.cpp
     src/Game.cpp
     src/Game.h
+    src/MainMenu.h
+    src/MainMenu.cpp
+    src/EndScreen.cpp
+    src/EndScreen.h
+    
 )
 # Ensure the root of the source tree is visible for headers like "Game.h"
 target_include_directories(main PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})

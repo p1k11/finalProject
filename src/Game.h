@@ -1,4 +1,6 @@
 #pragma once
+#include "MainMenu.h"
+#include "EndScreen.h"
 #include <SFML/Graphics.hpp>
 #include <vector>
 #include <algorithm>
@@ -60,6 +62,8 @@ private:
 	// text to display timer and leaderboard
     std::optional<sf::Text> timerText;
     std::optional<sf::Text> leaderboardText;
+    std::optional<MainMenu> mainMenu;
+    std::optional<EndScreen> endScreen;
 
 	// struct to hold leaderboard entries
     struct LeaderboardEntry {
@@ -102,14 +106,13 @@ private:
         MainMenu,
         Playing,
         Paused,
-        Leaderboard
+        Leaderboard,
+		EndScreen
     };
 
-    //main menu stuff
     GameState state = GameState::MainMenu;
 
-    sf::RectangleShape playButton;
-    sf::RectangleShape leaderboardButton;
+    // Leaderboard/back UI (kept in Game)
     sf::RectangleShape backButton;
 
     std::optional<sf::Text> pauseText;
@@ -122,20 +125,16 @@ private:
     std::optional<sf::Text> resumeButtonText;
     std::optional<sf::Text> pauseMenuButtonText;
 
-    std::optional<sf::Text> titleText;
-    std::optional<sf::Text> playButtonText;
-    std::optional<sf::Text> leaderboardButtonText;
     std::optional<sf::Text> backButtonText;
 
-    std::vector<sf::RectangleShape> difficultyButtons;
-    std::vector<std::optional<sf::Text>> difficultyButtonTexts;
+    void setupDifficultyButtons(); // (leave if used for pause/menu adjustments; otherwise can be removed)
 
-    void setupDifficultyButtons();
+    // NOTE: menu setup/render functions moved into MainMenu
+    void handleMenuClick(sf::Vector2f mousePos); // updated to use mainMenu
 
-    void setupMenu();
-    void handleMenuClick(sf::Vector2f mousePos);
-    void renderMainMenu();
-    void renderLeaderboardScreen();
+    //the game was creating unsolvable puzzles in the shuffle
+    void moveTileToEmpty(Tile& tile);
+    void shuffleSolvable();
 
 
 	//load the image, create tiles from it, and render the tiles
@@ -147,11 +146,10 @@ private:
 
     int selectedImageIndex = 0;
 
-    std::vector<sf::RectangleShape> imageButtons;
-    std::vector<std::optional<sf::Text>> imageButtonTexts;
-
     void loadSelectedImage();
-    void setupImageButtons();
+
+    void renderLeaderboardScreen();
+
 public:
 	// constructor and main loop
     Game();

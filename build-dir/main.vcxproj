@@ -335,6 +335,10 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
     <ClCompile Include="C:\Users\gough\Documents\GitHub\finalProject\src\main.cpp" />
     <ClCompile Include="C:\Users\gough\Documents\GitHub\finalProject\src\Game.cpp" />
     <ClInclude Include="C:\Users\gough\Documents\GitHub\finalProject\src\Game.h" />
+    <ClInclude Include="C:\Users\gough\Documents\GitHub\finalProject\src\MainMenu.h" />
+    <ClCompile Include="C:\Users\gough\Documents\GitHub\finalProject\src\MainMenu.cpp" />
+    <ClCompile Include="C:\Users\gough\Documents\GitHub\finalProject\src\EndScreen.cpp" />
+    <ClInclude Include="C:\Users\gough\Documents\GitHub\finalProject\src\EndScreen.h" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

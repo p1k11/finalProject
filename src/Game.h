@@ -25,6 +25,10 @@ private:
     int emptyY = 0;// position of the empty tile
 	int score = 0;// player's score
 
+    int puzzleScore = 100;
+    int totalScore = 0;
+    int moveCount = 0;
+
 	// font and text
 	sf::Font font;// flag to check if font loaded successfully
     bool fontLoaded = false;

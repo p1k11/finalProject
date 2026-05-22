@@ -37,7 +37,7 @@ Game::Game()
         timerText.emplace(font);
         timerText->setCharacterSize(24);
         timerText->setFillColor(sf::Color::White);
-        timerText->setPosition({ 10.f, 40.f });
+        timerText->setPosition({ 10.f, 100.f });
 
 		// setup leaderboard text
         leaderboardText.emplace(font);
@@ -54,6 +54,17 @@ Game::Game()
         pauseButtonText->setCharacterSize(22);
         pauseButtonText->setFillColor(sf::Color::White);
         pauseButtonText->setPosition({ 890.f, 15.f });
+
+		//back button for leaderboard
+        backButton.setSize({ 180.f, 50.f });
+        backButton.setPosition({ 20.f, 520.f });
+        backButton.setFillColor(sf::Color(80, 80, 80));
+
+        backButtonText.emplace(font);
+        backButtonText->setString("Back");
+        backButtonText->setCharacterSize(24);
+        backButtonText->setFillColor(sf::Color::White);
+        backButtonText->setPosition({ 80.f, 530.f });
 
         // load leaderboard data
         loadLeaderboard();
@@ -96,10 +107,15 @@ void Game::handleClick() {
 
             // Check if adjacent
             if (dx + dy == 1) {
-
-                // Move tile into empty space
                 moveTileToEmpty(tile);
 
+                moveCount++;
+
+                if (puzzleScore > 0) {
+                    puzzleScore--;
+                }
+
+                updateScoreText();
             }
 			// Check for win condition after move
             if (checkWin()) {
@@ -113,13 +129,13 @@ void Game::handleClick() {
 
 // Handle actions when the puzzle is solved update score leaderboard and display message before reshuffling
 void Game::onPuzzleSolved() {
-    score++;
+    totalScore += puzzleScore;
     updateScoreText();
 
     addScoreToLeaderboard();
 
     if (endScreen) {
-        endScreen->updateText(score, elapsedTime);
+        endScreen->updateText(totalScore, elapsedTime);
     }
 
     state = GameState::EndScreen;
@@ -227,7 +243,9 @@ void Game::handleMenuClick(sf::Vector2f mousePos) {
 
     // play / leaderboard buttons use MainMenu's shapes
     if (mainMenu->playButton.getGlobalBounds().contains(mousePos)) {
-        score = 0;
+        puzzleScore = 100;
+        totalScore = 0;
+        moveCount = 0;
         updateScoreText();
 
         pausedTimeTotal = 0.0f;
@@ -432,7 +450,7 @@ void Game::saveLeaderboard() {
 }
 // Add the current score and time to the leaderboard, sort it, keep only the top 5 entries, and update the displayed leaderboard text
 void Game::addScoreToLeaderboard() {
-    leaderboard.push_back({ score, elapsedTime });
+    leaderboard.push_back({ totalScore, elapsedTime });
 
     std::sort(leaderboard.begin(), leaderboard.end(),
         [](const LeaderboardEntry& a, const LeaderboardEntry& b) {
@@ -499,6 +517,19 @@ void Game::render() {
         }
     }
     else if (state == GameState::Playing) {
+        sf::RectangleShape emptySpace;
+        emptySpace.setSize({
+            tileSize * scaleFactor,
+            tileSize * scaleFactor
+            });
+
+        emptySpace.setPosition({
+            250.f + emptyX * tileSize * scaleFactor,
+            (600 - puzzleDisplaySize) / 2.0f + emptyY * tileSize * scaleFactor
+            });
+
+        emptySpace.setFillColor(sf::Color(30, 30, 30));
+        window.draw(emptySpace);
         for (auto& tile : tiles) {
             window.draw(tile.sprite);
         }
@@ -528,6 +559,10 @@ void Game::render() {
 // Update the score text to reflect the current score after a puzzle is solved
 void Game::updateScoreText() {
     if (scoreText) {
-        scoreText->setString("Score: " + std::to_string(score));
+        scoreText->setString(
+            "Puzzle Score: " + std::to_string(puzzleScore) +
+            "\nTotal Score: " + std::to_string(totalScore) +
+            "\nMoves: " + std::to_string(moveCount)
+        );
     }
 }

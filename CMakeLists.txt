@@ -25,6 +25,8 @@ add_executable(main
     src/PauseMenu.cpp
     src/Tile.cpp
     src/Tile.h
+    src/LeaderboardManager.h
+    src/LeaderboardManager.cpp
 
     
 

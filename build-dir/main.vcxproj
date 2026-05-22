@@ -343,6 +343,8 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
     <ClCompile Include="C:\Users\gough\Documents\GitHub\finalProject\src\PauseMenu.cpp" />
     <ClCompile Include="C:\Users\gough\Documents\GitHub\finalProject\src\Tile.cpp" />
     <ClInclude Include="C:\Users\gough\Documents\GitHub\finalProject\src\Tile.h" />
+    <ClInclude Include="C:\Users\gough\Documents\GitHub\finalProject\src\LeaderboardManager.h" />
+    <ClCompile Include="C:\Users\gough\Documents\GitHub\finalProject\src\LeaderboardManager.cpp" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

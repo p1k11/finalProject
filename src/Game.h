@@ -3,6 +3,7 @@
 #include "EndScreen.h"
 #include "PauseMenu.h"
 #include "Tile.h"
+#include "LeaderboardManager.h"
 #include <SFML/Graphics.hpp>
 #include <vector>
 #include <algorithm>
@@ -47,16 +48,6 @@ private:
     std::optional<MainMenu> mainMenu;
     std::optional<EndScreen> endScreen;
     std::optional<PauseMenu> pauseMenu;
-
-	// struct to hold leaderboard entries
-    struct LeaderboardEntry {
-        int score;
-        float time;
-    };
-
-	// leaderboard data
-    std::vector<LeaderboardEntry> leaderboard;
-
     //winning condition all tiles in correct position
     bool checkWin();
 	// game state
@@ -65,6 +56,7 @@ private:
 	// helper functions
     void createTiles();
     void shuffleTiles();
+    void drawTileBorder(const Tile& tile);
     void handleClick();
 
 	// main game loop functions
@@ -78,9 +70,9 @@ private:
 
 	// timer related functions
     void updateTimerText();
-    void loadLeaderboard();
-    void saveLeaderboard();
-    void addScoreToLeaderboard();
+    /*void loadLeaderboard();
+    void saveLeaderboard();*/
+    /*void addScoreToLeaderboard();*/
     void updateLeaderboardText();
     void onPuzzleSolved();
 
@@ -118,6 +110,8 @@ private:
     "image2.jpg",
     "image3.jpg"
     };
+
+    LeaderboardManager leaderboardManager;
 
     int selectedImageIndex = 0;
 

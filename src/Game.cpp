@@ -66,9 +66,7 @@ Game::Game()
         backButtonText->setFillColor(sf::Color::White);
         backButtonText->setPosition({ 80.f, 530.f });
 
-        // load leaderboard data
-        loadLeaderboard();
-		// update leaderboard text
+        leaderboardManager.load();
         updateLeaderboardText();
 
 		// initialize the separated main menu and other separate screens
@@ -132,7 +130,8 @@ void Game::onPuzzleSolved() {
     totalScore += puzzleScore;
     updateScoreText();
 
-    addScoreToLeaderboard();
+    leaderboardManager.addScore(totalScore, elapsedTime);
+    updateLeaderboardText();
 
     if (endScreen) {
         endScreen->updateText(totalScore, elapsedTime);
@@ -305,6 +304,22 @@ void Game::shuffleTiles() {
         moveTileToEmpty(tiles[chosenIndex]);
     }
 }
+void Game::drawTileBorder(const Tile& tile) {
+    sf::RectangleShape border;
+
+    border.setSize({
+        tileSize * scaleFactor,
+        tileSize * scaleFactor
+        });
+
+    border.setPosition(tile.sprite.getPosition());
+
+    border.setFillColor(sf::Color::Transparent);
+    border.setOutlineColor(sf::Color::White);
+    border.setOutlineThickness(2.f);
+
+    window.draw(border);
+}
 // Process all window events handle mouse clicks key presses and window close events
 void Game::processEvents() {
     while (auto event = window.pollEvent()) {
@@ -418,66 +433,19 @@ void Game::updateTimerText() {
         timerText->setString("Time: " + std::to_string(static_cast<int>(elapsedTime)) + "s");
     }
 }
-
-// Load leaderboard data from a file and populate the leaderboard vector
-void Game::loadLeaderboard() {
-    leaderboard.clear();
-
-    std::ifstream file("leaderboard.txt");
-
-    if (!file.is_open()) {
-        return;
-    }
-
-    int savedScore;
-    float savedTime;
-
-    while (file >> savedScore >> savedTime) {
-        leaderboard.push_back({ savedScore, savedTime });
-    }
-
-    file.close();
-}
-// Save the current leaderboard data to a file this can be viewed when the game is opeened again
-void Game::saveLeaderboard() {
-    std::ofstream file("leaderboard.txt");
-
-    for (auto& entry : leaderboard) {
-        file << entry.score << " " << entry.time << "\n";
-    }
-
-    file.close();
-}
-// Add the current score and time to the leaderboard, sort it, keep only the top 5 entries, and update the displayed leaderboard text
-void Game::addScoreToLeaderboard() {
-    leaderboard.push_back({ totalScore, elapsedTime });
-
-    std::sort(leaderboard.begin(), leaderboard.end(),
-        [](const LeaderboardEntry& a, const LeaderboardEntry& b) {
-            if (a.score == b.score) {
-                return a.time < b.time;
-            }
-            return a.score > b.score;
-        });
-
-    if (leaderboard.size() > 5) {
-        leaderboard.resize(5);
-    }
-
-    saveLeaderboard();
-    updateLeaderboardText();
-}
-// Update the leaderboard text to show the top scores and times in a formatted string
+//using leaderboard manager to load and save leaderboard data and update the leaderboard text to show top scores and times
 void Game::updateLeaderboardText() {
     if (!leaderboardText) return;
 
     std::string text = "Top Scores:\n";
 
-    for (int i = 0; i < static_cast<int>(leaderboard.size()); i++) {
+    const auto& entries = leaderboardManager.getEntries();
+
+    for (int i = 0; i < static_cast<int>(entries.size()); i++) {
         text += std::to_string(i + 1) + ". Score: " +
-            std::to_string(leaderboard[i].score) +
+            std::to_string(entries[i].score) +
             " Time: " +
-            std::to_string(static_cast<int>(leaderboard[i].time)) +
+            std::to_string(static_cast<int>(entries[i].time)) +
             "s\n";
     }
 
@@ -532,6 +500,7 @@ void Game::render() {
         window.draw(emptySpace);
         for (auto& tile : tiles) {
             window.draw(tile.sprite);
+            drawTileBorder(tile);
         }
 
         if (fontLoaded && scoreText) window.draw(*scoreText);

@@ -2,6 +2,7 @@
 #include "MainMenu.h"
 #include "EndScreen.h"
 #include "PauseMenu.h"
+#include "Tile.h"
 #include <SFML/Graphics.hpp>
 #include <vector>
 #include <algorithm>
@@ -33,24 +34,6 @@ private:
 	sf::Font font;// flag to check if font loaded successfully
     bool fontLoaded = false;
 	std::optional<sf::Text> scoreText;// text to display score
-	// tile struct to hold sprite and grid position
-    struct Tile {
-        sf::Sprite sprite;
-
-        int gridX;
-        int gridY;
-
-        int correctX;
-        int correctY;
-		// constructor to initialize tile with texture and grid position
-        Tile(const sf::Texture& texture, int x, int y)
-            : sprite(texture),
-            gridX(x),
-            gridY(y),
-            correctX(x),
-            correctY(y) {
-        }
-    };
 	// timer
     sf::Clock gameClock;
     float elapsedTime = 0.0f;

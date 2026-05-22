@@ -23,6 +23,8 @@ add_executable(main
     src/EndScreen.h
     src/PauseMenu.h
     src/PauseMenu.cpp
+    src/Tile.cpp
+    src/Tile.h
 
     
 

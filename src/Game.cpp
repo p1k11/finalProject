@@ -47,7 +47,7 @@ Game::Game()
 
         pauseButton.setSize({ 120.f, 40.f });
         pauseButton.setPosition({ 860.f, 10.f });
-        pauseButton.setFillColor(sf::Color(80, 80, 80));
+        pauseButton.setFillColor(sf::Color(90, 60, 150));
 
         pauseButtonText.emplace(font);
         pauseButtonText->setString("Pause");
@@ -58,13 +58,17 @@ Game::Game()
 		//back button for leaderboard
         backButton.setSize({ 180.f, 50.f });
         backButton.setPosition({ 20.f, 520.f });
-        backButton.setFillColor(sf::Color(80, 80, 80));
+        backButton.setFillColor(sf::Color(90, 60, 150));
 
         backButtonText.emplace(font);
         backButtonText->setString("Back");
         backButtonText->setCharacterSize(24);
         backButtonText->setFillColor(sf::Color::White);
         backButtonText->setPosition({ 80.f, 530.f });
+
+        sf::Color normalViolet(90, 60, 150);
+        sf::Color hoverViolet(130, 90, 200);
+        sf::Color selectedViolet(170, 120, 230);
 
         leaderboardManager.load();
         updateLeaderboardText();
@@ -496,7 +500,7 @@ void Game::render() {
             (600 - puzzleDisplaySize) / 2.0f + emptyY * tileSize * scaleFactor
             });
 
-        emptySpace.setFillColor(sf::Color(30, 30, 30));
+        emptySpace.setFillColor(sf::Color(90, 60, 150));
         window.draw(emptySpace);
         for (auto& tile : tiles) {
             window.draw(tile.sprite);

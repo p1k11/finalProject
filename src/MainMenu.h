@@ -22,6 +22,9 @@ public:
     std::optional<sf::Text> playButtonText;
     std::optional<sf::Text> leaderboardButtonText;
 
+    sf::Texture backgroundTexture;
+    std::optional<sf::Sprite> backgroundSprite;
+
     MainMenu(sf::Font& font);
 
     void setup(const std::vector<std::string>& imageFiles);

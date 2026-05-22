@@ -14,11 +14,11 @@ void MainMenu::setup(const std::vector<std::string>& imageFiles) {
 
     playButton.setSize({ 250.f, 60.f });
     playButton.setPosition({ 375.f, 170.f });
-    playButton.setFillColor(sf::Color(80, 80, 80));
+    playButton.setFillColor(sf::Color(90, 60, 150));
 
     leaderboardButton.setSize({ 250.f, 60.f });
     leaderboardButton.setPosition({ 375.f, 250.f });
-    leaderboardButton.setFillColor(sf::Color(80, 80, 80));
+    leaderboardButton.setFillColor(sf::Color(90, 60, 150));
 
     playButtonText.emplace(font);
     playButtonText->setString("Play Game");
@@ -35,11 +35,20 @@ void MainMenu::setup(const std::vector<std::string>& imageFiles) {
     imageButtons.clear();
     imageButtonTexts.clear();
 
+    if (backgroundTexture.loadFromFile("image.jpg")) {
+        backgroundSprite.emplace(backgroundTexture);
+
+        float scaleX = 1000.f / backgroundTexture.getSize().x;
+        float scaleY = 600.f / backgroundTexture.getSize().y;
+
+        backgroundSprite->setScale({ scaleX, scaleY });
+    }
+
     for (int i = 0; i < static_cast<int>(imageFiles.size()); i++) {
         sf::RectangleShape button;
         button.setSize({ 140.f, 45.f });
         button.setPosition({ 280.f + i * 160.f, 350.f });
-        button.setFillColor(sf::Color(80, 80, 80));
+        button.setFillColor(sf::Color(90, 60, 150));
         imageButtons.push_back(button);
 
         imageButtonTexts.emplace_back(font);
@@ -47,6 +56,7 @@ void MainMenu::setup(const std::vector<std::string>& imageFiles) {
         imageButtonTexts[i]->setCharacterSize(20);
         imageButtonTexts[i]->setFillColor(sf::Color::White);
         imageButtonTexts[i]->setPosition({ 310.f + i * 160.f, 360.f });
+
     }
 
     difficultyButtons.clear();
@@ -62,7 +72,7 @@ void MainMenu::setup(const std::vector<std::string>& imageFiles) {
         sf::RectangleShape button;
         button.setSize({ 170.f, 45.f });
         button.setPosition({ 240.f + i * 190.f, 430.f });
-        button.setFillColor(sf::Color(80, 80, 80));
+        button.setFillColor(sf::Color(90, 60, 150));
         difficultyButtons.push_back(button);
 
         difficultyButtonTexts.emplace_back(font);
@@ -74,7 +84,30 @@ void MainMenu::setup(const std::vector<std::string>& imageFiles) {
 }
 
 void MainMenu::render(sf::RenderWindow& window, int selectedImageIndex, int gridSize) {
+    if (backgroundSprite) {
+        window.draw(*backgroundSprite);
+    }
+
+    sf::RectangleShape overlay;
+    overlay.setSize({ 1000.f, 600.f });
+    overlay.setFillColor(sf::Color(0, 0, 0, 120));
+    window.draw(overlay);
+
     if (titleText) window.draw(*titleText);
+
+    sf::Vector2f mousePos = sf::Vector2f(sf::Mouse::getPosition(window));
+
+    sf::Color normalViolet(90, 60, 150);
+    sf::Color hoverViolet(130, 90, 200);
+    sf::Color selectedViolet(170, 120, 230);
+
+    playButton.setFillColor(
+        playButton.getGlobalBounds().contains(mousePos) ? hoverViolet : normalViolet
+    );
+
+    leaderboardButton.setFillColor(
+        leaderboardButton.getGlobalBounds().contains(mousePos) ? hoverViolet : normalViolet
+    );
 
     window.draw(playButton);
     window.draw(leaderboardButton);
@@ -84,7 +117,7 @@ void MainMenu::render(sf::RenderWindow& window, int selectedImageIndex, int grid
 
     for (int i = 0; i < static_cast<int>(imageButtons.size()); i++) {
         imageButtons[i].setFillColor(
-            i == selectedImageIndex ? sf::Color(120, 120, 120) : sf::Color(80, 80, 80)
+            i == selectedImageIndex ? sf::Color(170, 120, 230) : sf::Color(90, 60, 150)
         );
 
         window.draw(imageButtons[i]);
@@ -92,13 +125,21 @@ void MainMenu::render(sf::RenderWindow& window, int selectedImageIndex, int grid
         if (imageButtonTexts[i]) {
             window.draw(*imageButtonTexts[i]);
         }
+        bool isSelected = i == selectedImageIndex;
+        bool isHovered = imageButtons[i].getGlobalBounds().contains(mousePos);
+
+        imageButtons[i].setFillColor(
+            isSelected ? selectedViolet :
+            isHovered ? hoverViolet :
+            normalViolet
+        );
     }
 
     for (int i = 0; i < static_cast<int>(difficultyButtons.size()); i++) {
         int buttonGridSize = 3 + i;
 
         difficultyButtons[i].setFillColor(
-            buttonGridSize == gridSize ? sf::Color(120, 120, 120) : sf::Color(80, 80, 80)
+            buttonGridSize == gridSize ? sf::Color(170, 120, 230) : sf::Color(90, 60, 150)
         );
 
         window.draw(difficultyButtons[i]);
@@ -106,5 +147,13 @@ void MainMenu::render(sf::RenderWindow& window, int selectedImageIndex, int grid
         if (difficultyButtonTexts[i]) {
             window.draw(*difficultyButtonTexts[i]);
         }
+        bool isSelected = buttonGridSize == gridSize;
+        bool isHovered = difficultyButtons[i].getGlobalBounds().contains(mousePos);
+
+        difficultyButtons[i].setFillColor(
+            isSelected ? selectedViolet :
+            isHovered ? hoverViolet :
+            normalViolet
+        );
     }
 }

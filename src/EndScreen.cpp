@@ -58,6 +58,19 @@ void EndScreen::render(sf::RenderWindow& window) {
     if (scoreText) window.draw(*scoreText);
     if (timeText) window.draw(*timeText);
 
+    sf::Vector2f mousePos = sf::Vector2f(sf::Mouse::getPosition(window));
+
+    sf::Color normalViolet(90, 60, 150);
+    sf::Color hoverViolet(130, 90, 200);
+
+    playAgainButton.setFillColor(
+        playAgainButton.getGlobalBounds().contains(mousePos) ? hoverViolet : normalViolet
+    );
+
+    mainMenuButton.setFillColor(
+        mainMenuButton.getGlobalBounds().contains(mousePos) ? hoverViolet : normalViolet
+    );
+
     window.draw(playAgainButton);
     window.draw(mainMenuButton);
 

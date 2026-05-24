@@ -490,7 +490,14 @@ void Game::renderLeaderboardScreen() {
     if (leaderboardText) {
         window.draw(*leaderboardText);
     }
+    sf::Vector2f mousePos = sf::Vector2f(sf::Mouse::getPosition(window));
 
+    sf::Color normalViolet(90, 60, 150);
+    sf::Color hoverViolet(130, 90, 200);
+
+    backButton.setFillColor(
+        backButton.getGlobalBounds().contains(mousePos) ? hoverViolet : normalViolet
+    );
     window.draw(backButton);
 
     if (backButtonText) {
@@ -541,6 +548,14 @@ void Game::render() {
 
         if (fontLoaded && scoreText) window.draw(*scoreText);
         if (fontLoaded && timerText) window.draw(*timerText);
+
+        sf::Vector2f mousePos = sf::Vector2f(sf::Mouse::getPosition(window));
+
+        pauseButton.setFillColor(
+            pauseButton.getGlobalBounds().contains(mousePos)
+            ? sf::Color(130, 90, 200)
+            : sf::Color(90, 60, 150)
+        );
 
         window.draw(pauseButton);
 

@@ -46,11 +46,26 @@ void PauseMenu::render(sf::RenderWindow& window) {
     window.draw(overlay);
     window.draw(panel);
 
+
     if (pauseTitleText) window.draw(*pauseTitleText);
 
     window.draw(resumeButton);
     window.draw(mainMenuButton);
 
+    sf::Vector2f mousePos = sf::Vector2f(sf::Mouse::getPosition(window));
+
+    sf::Color normalViolet(90, 60, 150);
+    sf::Color hoverViolet(130, 90, 200);
+    resumeButton.setFillColor(
+        resumeButton.getGlobalBounds().contains(mousePos) ? hoverViolet : normalViolet
+    );
+
+    mainMenuButton.setFillColor(
+        mainMenuButton.getGlobalBounds().contains(mousePos) ? hoverViolet : normalViolet
+    );
+
     if (resumeButtonText) window.draw(*resumeButtonText);
     if (mainMenuButtonText) window.draw(*mainMenuButtonText);
+
+
 }

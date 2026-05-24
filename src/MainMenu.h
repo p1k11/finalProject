@@ -13,14 +13,21 @@ public:
     sf::RectangleShape leaderboardButton;
 
     std::vector<sf::RectangleShape> imageButtons;
-    std::vector<std::optional<sf::Text>> imageButtonTexts;
+    std::vector<sf::Texture> imagePreviewTextures;
+    std::vector<sf::Sprite> imagePreviewSprites;
+    
 
     std::vector<sf::RectangleShape> difficultyButtons;
     std::vector<std::optional<sf::Text>> difficultyButtonTexts;
 
+    std::vector<std::vector<sf::RectangleShape>> difficultyGridPreviews;
+
     std::optional<sf::Text> titleText;
     std::optional<sf::Text> playButtonText;
     std::optional<sf::Text> leaderboardButtonText;
+
+    std::optional<sf::Text> imageSelectText;
+    std::optional<sf::Text> difficultySelectText;
 
     sf::Texture backgroundTexture;
     std::optional<sf::Sprite> backgroundSprite;

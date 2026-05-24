@@ -13,15 +13,15 @@ void PauseMenu::setup() {
     pauseTitleText->setString("Paused");
     pauseTitleText->setCharacterSize(48);
     pauseTitleText->setFillColor(sf::Color::White);
-    pauseTitleText->setPosition({ 410.f, 140.f });
+    pauseTitleText->setPosition({ 410.f, 180.f });
 
     resumeButton.setSize({ 250.f, 60.f });
     resumeButton.setPosition({ 375.f, 250.f });
-    resumeButton.setFillColor(sf::Color(80, 80, 80));
+    resumeButton.setFillColor(sf::Color(90, 60, 150));
 
     mainMenuButton.setSize({ 250.f, 60.f });
     mainMenuButton.setPosition({ 375.f, 340.f });
-    mainMenuButton.setFillColor(sf::Color(80, 80, 80));
+    mainMenuButton.setFillColor(sf::Color(90, 60, 150));
 
     resumeButtonText.emplace(font);
     resumeButtonText->setString("Resume");
@@ -34,10 +34,17 @@ void PauseMenu::setup() {
     mainMenuButtonText->setCharacterSize(28);
     mainMenuButtonText->setFillColor(sf::Color::White);
     mainMenuButtonText->setPosition({ 430.f, 352.f });
+
+    panel.setSize({ 360.f, 280.f });
+    panel.setPosition({ 320.f, 160.f });
+    panel.setFillColor(sf::Color(40, 25, 70, 230));
+    panel.setOutlineColor(sf::Color(170, 120, 230));
+    panel.setOutlineThickness(3.f);
 }
 
 void PauseMenu::render(sf::RenderWindow& window) {
     window.draw(overlay);
+    window.draw(panel);
 
     if (pauseTitleText) window.draw(*pauseTitleText);
 

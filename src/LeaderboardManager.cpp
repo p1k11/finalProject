@@ -1,6 +1,6 @@
 #include "LeaderboardManager.h"
-#include <fstream>
-#include <algorithm>
+#include "fstream"
+#include "algorithm"
 
 void LeaderboardManager::load() {
     entries.clear();

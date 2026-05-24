@@ -16,6 +16,8 @@ public:
     std::optional<sf::Text> mainMenuButtonText;
     std::optional<sf::Text> pauseTitleText;
 
+    sf::RectangleShape panel;
+
     PauseMenu(sf::Font& font);
 
     void setup();

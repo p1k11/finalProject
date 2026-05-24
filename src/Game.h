@@ -99,7 +99,10 @@ private:
     std::optional<sf::Text> backButtonText;
     std::optional<sf::Text> messageText;
 
-    // NOTE: menu setup/render functions moved into MainMenu
+    sf::RectangleShape leaderboardPanel;
+    std::optional<sf::Text> leaderboardTitleText;
+
+    // menu setup/render functions moved into MainMenu
     void handleMenuClick(sf::Vector2f mousePos); // updated to use mainMenu
 
     //the game was creating unsolvable puzzles in the shuffle

@@ -41,9 +41,31 @@ Game::Game()
 
 		// setup leaderboard text
         leaderboardText.emplace(font);
-        leaderboardText->setCharacterSize(20);
+        leaderboardText->setCharacterSize(24);
         leaderboardText->setFillColor(sf::Color::White);
-        leaderboardText->setPosition({ 10.f, 70.f });
+        leaderboardText->setPosition({ 360.f, 190.f });
+
+        leaderboardPanel.setSize({ 460.f, 360.f });
+        leaderboardPanel.setPosition({ 270.f, 120.f });
+        leaderboardPanel.setFillColor(sf::Color(40, 25, 70, 230));
+        leaderboardPanel.setOutlineColor(sf::Color(170, 120, 230));
+        leaderboardPanel.setOutlineThickness(3.f);
+
+        leaderboardTitleText.emplace(font);
+        leaderboardTitleText->setString("Leaderboard");
+        leaderboardTitleText->setCharacterSize(42);
+        leaderboardTitleText->setFillColor(sf::Color::White);
+        leaderboardTitleText->setPosition({ 370.f, 135.f });
+
+        backButton.setSize({ 180.f, 50.f });
+        backButton.setPosition({ 410.f, 500.f });
+        backButton.setFillColor(sf::Color(90, 60, 150));
+
+        backButtonText.emplace(font);
+        backButtonText->setString("Back");
+        backButtonText->setCharacterSize(24);
+        backButtonText->setFillColor(sf::Color::White);
+        backButtonText->setPosition({ 465.f, 510.f });
 
         pauseButton.setSize({ 120.f, 40.f });
         pauseButton.setPosition({ 860.f, 10.f });
@@ -459,11 +481,21 @@ void Game::updateLeaderboardText() {
 void Game::renderLeaderboardScreen() {
     if (!fontLoaded) return;
 
-    if (leaderboardText) window.draw(*leaderboardText);
+    window.draw(leaderboardPanel);
+
+    if (leaderboardTitleText) {
+        window.draw(*leaderboardTitleText);
+    }
+
+    if (leaderboardText) {
+        window.draw(*leaderboardText);
+    }
 
     window.draw(backButton);
 
-    if (backButtonText) window.draw(*backButtonText);
+    if (backButtonText) {
+        window.draw(*backButtonText);
+    }
 }
 
 void Game::renderPauseScreen() {

@@ -6,7 +6,7 @@
 Game::Game()
     : window(sf::VideoMode({ 1000, 600 }), "Slide Puzzle", sf::Style::Titlebar | sf::Style::Close)
 {   
-	// Load resources image and font
+	// Load resources images and font
     if (!texture.loadFromFile(imageFiles[selectedImageIndex])) {
         std::cout << "Failed to load image\n";
     }
@@ -92,6 +92,7 @@ Game::Game()
         sf::Color hoverViolet(130, 90, 200);
         sf::Color selectedViolet(170, 120, 230);
 
+        // initialize leaderboard manager
         leaderboardManager.load();
         updateLeaderboardText();
 
@@ -111,6 +112,7 @@ Game::Game()
 
 // Main game loop
 void Game::run() {
+	// the main game loop runs until the window is closed
     while (window.isOpen()) {
         processEvents();
         update();
@@ -120,16 +122,18 @@ void Game::run() {
 
 // Handle mouse click events to move tiles if they are adjacent to the empty space
 void Game::handleClick() {
+	// get mouse position relative to the window
     auto mousePos = sf::Mouse::getPosition(window);
 
 	// Check if click is on a tile
     for (auto& tile : tiles) {
+		// check if the mouse click is within the bounds of the tiles sprite
         if (tile.sprite.getGlobalBounds().contains((sf::Vector2f)mousePos)) {
 
             int dx = abs(tile.gridX - emptyX);
             int dy = abs(tile.gridY - emptyY);
 
-            // Check if adjacent
+            // Check if adjacent tile is next to the empty space
             if (dx + dy == 1) {
                 moveTileToEmpty(tile);
 
@@ -156,9 +160,11 @@ void Game::onPuzzleSolved() {
     totalScore += puzzleScore;
     updateScoreText();
 
+	// Add score to leaderboard and update leaderboard text
     leaderboardManager.addScore(totalScore, elapsedTime);
     updateLeaderboardText();
 
+	// Show end screen with final score and time
     if (endScreen) {
         endScreen->updateText(totalScore, elapsedTime);
     }
